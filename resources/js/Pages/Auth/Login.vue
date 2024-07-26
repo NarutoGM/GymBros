@@ -47,7 +47,7 @@ const submit = () => {
 					
 					<form @submit.prevent="submit">
 						<div class="mt-4">
-							<InputLabel for="email" value="Correo" />
+							<InputLabel for="email" value="Correo corporativo" />
 							<TextInput id="email" type="email" class="block w-full mt-1" v-model="form.email" required autofocus autocomplete="username" />
 							<InputError class="mt-2" :message="form.errors.email" />
 						</div>
