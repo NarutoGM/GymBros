@@ -11,7 +11,8 @@ class Miembros extends Model
     public $timestamps = false;     
 
     protected $fillable = [
-        'nombre','duracion','precio'
+        'nombre','telefono','direccion','edad','sufreEnfermedad','tieneSeguro','enfermedad','institucion','nombreContacto','estado','fechaRegistro',
+        'fechaInicio','fechaFin','idMembresia','membresia'
     ];
 
     

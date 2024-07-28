@@ -15,7 +15,7 @@ class Membresias extends Model
     ];
 
     
-    public function evento()
+    public function Miembros()
     {
         return $this->hasOne(Miembros::class, 'idMembresia', 'idMembresia');
     }
