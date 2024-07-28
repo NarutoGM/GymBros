@@ -3,10 +3,13 @@
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\MembresiaController;
+use App\Http\Controllers\MiembrosController;
+
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
+use App\Models\Miembros;
 
 /*
 |--------------------------------------------------------------------------
@@ -41,6 +44,7 @@ Route::middleware('auth')->group(function () {
 
     Route::get('users', [UserController::class, 'index'])->name('users.index');
     Route::resource('/membresias', MembresiaController::class);
+    Route::resource('/miembros', MiembrosController::class);
 
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
