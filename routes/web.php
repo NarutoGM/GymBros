@@ -2,7 +2,10 @@
 
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\MembresiaController;
+use App\Http\Controllers\CategoriasController;
+use App\Http\Controllers\ProductosController;
+use App\Http\Controllers\VentasController;
+
 use App\Http\Controllers\MiembrosController;
 
 use Illuminate\Foundation\Application;
@@ -21,7 +24,6 @@ use App\Models\Miembros;
 | contains the "web" middleware group. Now create something great!
 |
 
-
 Route::get('/', function () {
     return Inertia::render('Welcome', [
         'canLogin' => Route::has('login'),
@@ -30,10 +32,11 @@ Route::get('/', function () {
         'phpVersion' => PHP_VERSION,
     ]);
 });
+
+
+
 */
 Route::get('/', [AuthenticatedSessionController::class, 'create'])->name('login');
-
-
 
 Route::get('/dashboard', function () {
     return Inertia::render('Dashboard');
@@ -43,7 +46,10 @@ Route::middleware('auth')->group(function () {
     Route::get('/about', fn () => Inertia::render('About'))->name('about');
 
     Route::get('users', [UserController::class, 'index'])->name('users.index');
-    Route::resource('/membresias', MembresiaController::class);
+    Route::resource('/productos', ProductosController::class);
+    Route::resource('/categorias', CategoriasController::class);
+    Route::resource('/ventas', VentasController::class);
+
     Route::resource('/miembros', MiembrosController::class);
 
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

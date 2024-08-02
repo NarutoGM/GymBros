@@ -2,18 +2,17 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Cursos;
+use App\Models\Categoria;
 use App\Models\Membresias;
-use App\Models\Miembros;
+use COM;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
-use Illuminate\Support\Facades\Storage;
 
 use function Laravel\Prompts\alert;
 
 
 
-class MiembrosController extends Controller
+class VentasController extends Controller
 {
     const PAGINATION =25;
   public function edit(Request $request,$CodCurso)
@@ -54,13 +53,11 @@ class MiembrosController extends Controller
 
 
     public function index(Request $request)
-    {   
-        $membresias=Membresias::all();
-        $miembros = Miembros::with('membresias:idMembresia,nombre')->paginate(10);
-        
-        return Inertia::render('Miembros/Index', [
-            'miembros' => $miembros,
-            'membresias' => $membresias
+    {
+        $categoria = Categoria::orderBy('idCategoria', 'asc')->paginate(9);
+    
+        return Inertia::render('Categoria/Index', [
+            'categoria' => $categoria
         ]);
     }
     

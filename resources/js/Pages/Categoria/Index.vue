@@ -14,16 +14,27 @@ import vueTailwindPaginationUmd from '@ocrv/vue-tailwind-pagination';
 
 import Swal from 'sweetalert2';
 const props= defineProps({
-	miembros:{type:Object}
+	categoria:{type:Object}
 	
 });
-const form = useForm({nombre:'',duracion:'',precio:'',idMembresia:''});
-const v = ref({	nombre:'',duracion:'',precio:'',idMembresia:''});
+const form = useForm({categoria:''});
+const v = ref({	categoria:''});
 const showModalForm = ref(false);
+const showModalView = ref(false);
 const title = ref('');
 let operation = ref(1);
 const msj = ref('');
 const classMsj = ref('hidden');
+
+const openModalView = (a) =>{
+
+    v.value.categoria=a.categoria;
+    v.value.productos=a.productos;
+	showModalView.value = true;
+    title.value='Listado de productos';
+
+}
+
 
 const openModalForm = (op,a) =>{
 
@@ -31,33 +42,32 @@ const openModalForm = (op,a) =>{
 	showModalForm.value = true;
 	operation = op;
 	if (op===1){
-		title.value='Crear una membresia';
+		title.value='Crear una nueva categoria';
 	}else{
-		title.value='Editar una membresia';
-		form.duracion=a.duracion;
-		form.nombre=a.nombre;
-		form.precio=a.precio;
-		form.idMembresia=a.idMembresia;
+		title.value='Editar nombre de categoria';
+		form.categoria=a.categoria;
+
+		form.idCategoria=a.idCategoria;
 
 	}
      
 }
 
-const deletedCursos= (idMembresia,nombre) =>{
+const deletedCursos= (idCategoria,categoria) =>{
     const alerta=Swal.mixin({
        buttonsStyling:true
     });
     alerta.fire({
 
-        title:'Desea desabilitar la membresia '+  nombre +' ? ',
+        title:'Desea eliminar la categoria? '+  categoria +' ? ',
         icon:'question', showCancelButton:true,
-        confirmButtonText:'<i class="fa-solid fa-check"></i> Yes, delete',
-        cancelButtonText:'<i class="fa-solid fa-ban"></i> Cancel',
+        confirmButtonText:'<i class="fa-solid fa-check"></i> Si, eliminar',
+        cancelButtonText:'<i class="fa-solid fa-ban"></i> Cancelar',
     }).then((result) => {
         if(result.isConfirmed) {
 		    
-            form.delete(route('membresias.destroy',idMembresia),{
-                onSuccess: () => {ok('Membresia eliminada')}
+            form.delete(route('categorias.destroy',idCategoria),{
+                onSuccess: () => {ok('Categoria eliminada')}
             });
 			
         }
@@ -73,14 +83,20 @@ const closeModalForm = () =>{
 
 }
 
+const closeModalView = (a) =>{
+      showModalForm.value = false;
+
+      showModalView.value=false;
+}
+
 
 const save = () => { 
     if (operation == 1) {
-        form.post(route('membresias.store'), {
+        form.post(route('categorias.store'), {
             onSuccess: () => { ok('Membresia creada') }
         });
     } else {
-        form.put(route('membresias.update', form.idMembresia), {
+        form.put(route('categorias.update', form.idCategoria), {
             onSuccess: () => { ok('Membresia editada') }
         });
 
@@ -104,16 +120,16 @@ const ok = (m) => {
 const formPage = useForm({});
 
 const onPageClick = (event)=>{
-    formPage.get(route('membresias.index',{page:event}));
+    formPage.get(route('categorias.index',{page:event}));
 }
 </script>
 
 <template>
-	<Head title="MEMBRESIAS" />
+	<Head title="CATEGORIAS" />
 	
 	<AuthenticatedLayout>
 		<template #header>
-			GESTION DE MIEMBROS REGISTRADOS //
+			GESTION DE CATEGORIAS  //
 
 		</template>
 
@@ -126,9 +142,10 @@ const onPageClick = (event)=>{
 <P class="text-xl mx-2">NUEVO REGISTRO</P> 
 	</div>
 		</DarkButton>
+
 		<vueTailwindPaginationUmd class="relative" 
-       :current="miembros.currentPage" :total="miembros.total" 
-       :per-page="miembros.perPage"
+       :current="categoria.currentPage" :total="categoria.total" 
+       :per-page="categoria.perPage"
        @page-changed="$event => onPageClick($event)"
        ></vueTailwindPaginationUmd>
 	   
@@ -158,19 +175,32 @@ const onPageClick = (event)=>{
     <div class="w-full overflow-x-auto bg-white">
         <table class="w-full whitespace-nowrap">
             <thead>
-                <tr class="text-sm font-semibold tracking-wide text-gray-100 uppercase border-b bg-blue-800">
-                    <th class="px-1 py-3 text-center">membresia</th>
-                    <th class="px-1 py-3 text-center">Dias</th>
-                    <th class="px-1 py-3 text-center">Precio</th>
-                    <th class="px-1 py-3 text-center">Editar</th>
-                    <th class="px-1 py-3 text-center">Eliminar</th>
+                <tr class="text-sm font-semibold tracking-wide text-gray-100 uppercase border-b bg-blue-700">
+                    <th class="px-1 py-3 text-center">CATEGORIA</th>
+                    <th class="px-1 py-3 text-center"># PRODUCTOS</th>
+                    <th class="px-1 py-3 text-center">VER LISTA</th>
+
+                    <th class="px-1 py-3 text-center">EDITAR</th>
+                    <th class="px-1 py-3 text-center">ELIMINAR</th>
+
                 </tr>
             </thead>
             <tbody class="text-gray-900 font-bold divide-y dark:divide-gray-700 dark:bg-blue-50">
-                <tr v-for="(a, i) in miembros.data" :key="a.dni" class="text-gray-500">
-                    <td class="px-1 py-3 text-sm text-center">{{ a.dni }}</td>
-                    <td class="px-1 py-3 text-sm text-center">{{ a.nombre }}</td>
-                    <td class="px-1 py-3 text-sm text-center">{{ a.telefono }}</td>
+                <tr v-for="(a, i) in categoria.data" :key="a.idCategoria" class="text-gray-500">
+                    <td class="px-1 py-3 text-sm text-center">{{ a.categoria }}</td>
+                    <td class="px-1 py-3 text-sm text-center">{{ a.productos_count  }}</td>
+
+                    <td class="px-1 py-3 text-sm text-center">
+                        <SecondaryButton @click="openModalView(a)">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z" />
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+                            </svg>
+
+                        </SecondaryButton>
+                    </td>
+
+
                     <td class="px-1 py-3 text-sm text-center">
                         <WarningButton @click="openModalForm(2, a)">
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
@@ -179,12 +209,16 @@ const onPageClick = (event)=>{
                         </WarningButton>
                     </td>
                     <td class="px-1 py-3 text-sm text-center">
-                        <DeleteButton @click="$event => deletedCursos(a.idMembresia, a.nombre)">
+                        <DeleteButton @click="$event => deletedCursos(a.idCategoria, a.categoria)">
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0"/>
                             </svg>
                         </DeleteButton>
                     </td>
+
+
+
+
                 </tr>
             </tbody>
         </table>
@@ -204,43 +238,20 @@ const onPageClick = (event)=>{
 
 
 
-					<InputGroup :text="'NOMBRE DE LA MEMBRESIA'" :require="'required'" v-model="form.nombre" :type="'text'">
+					<InputGroup :text="'NOMBRE DE LA CATEGORIA'" :require="'required'" v-model="form.categoria" :type="'text'">
 						
-						<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
-                           <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.042A8.967 8.967 0 0 0 6 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 0 1 6 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 0 1 6-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0 0 18 18a8.967 8.967 0 0 0-6 2.292m0-14.25v14.25" />
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                         <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6A2.25 2.25 0 0 1 6 3.75h2.25A2.25 2.25 0 0 1 10.5 6v2.25a2.25 2.25 0 0 1-2.25 2.25H6a2.25 2.25 0 0 1-2.25-2.25V6ZM3.75 15.75A2.25 2.25 0 0 1 6 13.5h2.25a2.25 2.25 0 0 1 2.25 2.25V18a2.25 2.25 0 0 1-2.25 2.25H6A2.25 2.25 0 0 1 3.75 18v-2.25ZM13.5 6a2.25 2.25 0 0 1 2.25-2.25H18A2.25 2.25 0 0 1 20.25 6v2.25A2.25 2.25 0 0 1 18 10.5h-2.25a2.25 2.25 0 0 1-2.25-2.25V6ZM13.5 15.75a2.25 2.25 0 0 1 2.25-2.25H18a2.25 2.25 0 0 1 2.25 2.25V18A2.25 2.25 0 0 1 18 20.25h-2.25A2.25 2.25 0 0 1 13.5 18v-2.25Z" />
                         </svg>
 
-
 					</InputGroup>
 					
-					<InputError class="mt-1" :message="form.errors.nombre"></InputError>
+					<InputError class="mt-1" :message="form.errors.categoria"></InputError>
 
 
-					<InputGroup :text="'DIAS DE DURACIóN'" :require="'required'" v-model="form.duracion" :type="'text'">
-						
-						<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
-  <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
-</svg>
-
-
-
-
-					</InputGroup>
 					
-					<InputError class="mt-1" :message="form.errors.duracion"></InputError>
 
-					<InputGroup :text="'PRECIO DE MEMBRESIA'" :require="'required'" v-model="form.precio" :type="'number'" step="0.01">
-
-						
-						<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
-  						<path stroke-linecap="round" stroke-linejoin="round" d="M2.25 18.75a60.07 60.07 0 0 1 15.797 2.101c.727.198 1.453-.342 1.453-1.096V18.75M3.75 4.5v.75A.75.75 0 0 1 3 6h-.75m0 0v-.375c0-.621.504-1.125 1.125-1.125H20.25M2.25 6v9m18-10.5v.75c0 .414.336.75.75.75h.75m-1.5-1.5h.375c.621 0 1.125.504 1.125 1.125v9.75c0 .621-.504 1.125-1.125 1.125h-.375m1.5-1.5H21a.75.75 0 0 0-.75.75v.75m0 0H3.75m0 0h-.375a1.125 1.125 0 0 1-1.125-1.125V15m1.5 1.5v-.75A.75.75 0 0 0 3 15h-.75M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Zm3 0h.008v.008H18V10.5Zm-12 0h.008v.008H6V10.5Z" />
-						</svg>
-
-
-
-					</InputGroup>
 					
-					<InputError class="mt-1" :message="form.errors.precio"></InputError>
 
 					<PrimaryButton @click="save">Guardar</PrimaryButton>
 				 </div>
@@ -249,6 +260,30 @@ const onPageClick = (event)=>{
 				<SecondaryButton @click="closeModalForm">Cancel</SecondaryButton>
 			</div>
 		</Modal>
-		
+        <Modal :show="showModalView" @close="closeModalView">
+			<div class="p-6">            
+                 <h2 class="text-lg font-medium text-gray-900">{{ title }}</h2>
+
+				 <div class="m-6 mb-6 space-y-6 max-w-xl">               
+                
+                 <p>Categoria: <span class="text-lg font-medium text-gray-900">{{v.categoria}}</span></p>
+
+                 <p>Productos: </p>
+
+                    <ol>
+                        <li class="text-lg font-medium text-gray-900" v-for="(prod, i) in v.productos" :key="i">
+                               {{ (i+1) + ') ' + prod.producto }}
+                        </li>
+
+                    </ol>
+
+					
+						
+			</div>
+			</div>
+			<div class="m-6 flex justify-end">
+				<SecondaryButton @click="closeModalView">Cancel</SecondaryButton>
+			</div>
+		</Modal>
 	</AuthenticatedLayout>
 </template>

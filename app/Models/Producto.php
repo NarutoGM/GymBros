@@ -4,9 +4,9 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Miembros extends Model
+class Producto extends Model
 {
-    protected $table = 'miembros';
+    protected $table = 'productos';
     protected $primaryKey = 'dni';
     public $timestamps = false;     
 
@@ -18,9 +18,9 @@ class Miembros extends Model
     
 
     // Relación uno a uno con Membresia
-    public function Membresias()
+    public function Categoria()
     {
-        return $this->belongsTo(Membresias::class, 'idMembresia', 'idMembresia');
+        return $this->belongsTo(Categoria::class, 'idCategoria', 'idCategoria');
     }
 
 

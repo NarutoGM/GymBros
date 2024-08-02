@@ -2,7 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Cursos;
+use App\Models\Categoria;
+use App\Models\Producto;
 use App\Models\Membresias;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -11,7 +12,7 @@ use function Laravel\Prompts\alert;
 
 
 
-class MembresiaController extends Controller
+class ProductosController extends Controller
 {
     const PAGINATION =25;
   public function edit(Request $request,$CodCurso)
@@ -50,14 +51,21 @@ class MembresiaController extends Controller
 
 
 
-
     public function index(Request $request)
     {
-        $membresia = Membresias::orderBy('idMembresia', 'asc')->paginate(9);
+        $categoria=Categoria::all();
+
+        $producto = Producto::with('categoria:idCategoria,categoria')->paginate(9);
     
-        return Inertia::render('Membresias/Index', [
-            'membresia' => $membresia
+        return Inertia::render('Producto/Index', [
+            'producto' => $producto,
+            'categoria' => $categoria
         ]);
+        
+      //  return response()->json([
+     //       'producto' => $producto,
+     //       'categoria' => $categoria
+     //   ]);
     }
     
     public function store(Request $request)
