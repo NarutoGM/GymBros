@@ -18,7 +18,7 @@ import NavLink from '@/Components/NavLink.vue';
 
 import Swal from 'sweetalert2';
 const props= defineProps({
-	producto:{type:Object},flash:{type:Object}
+	producto:{type:Object},flash:{type:Object},categoria:{type:Object}
 	
 });
 const form = useForm({idProducto:'',producto:'',precio:'',stock:'',categoria:''});
@@ -49,6 +49,7 @@ if (op===1){
     title.value='Crear un nuevo producto';
 }else{
     title.value='Editar un producto';
+    form.idCategoria=b.idCategoria;
     form.categoria=b.categoria;
     form.producto=b.producto;
     form.precio=b.precio;
@@ -248,14 +249,15 @@ const onPageClick = (event)=>{
 
                     <span >CATEGORIA: </span>
 
-					<SelectInput :text="'CATEGORIA'" :require="'required'" v-model="form.categoria" :type="'text'">
+					<SelectInput :text="'CATEGORIA'" :require="'required'" v-model="form.idCategoria" :type="'text'" :Options="categoria">
 						
                         -
 
 
 					</SelectInput>
                     <br>
-					<InputError class="mt-1" :message="form.errors.categoria"></InputError>
+					<InputError class="mt-1" :message="form.errors.idCategoria"></InputError>
+
                     <span>PRECIO: </span>
 
                     <InputGroup :text="'PRECIO'" :require="'required'" v-model="form.precio" :type="'text'">
