@@ -55,53 +55,56 @@ class ProductosController extends Controller
     {
         $categoria=Categoria::all();
 
-        $producto = Producto::with('categoria:idCategoria,categoria')->paginate(9);
+        $producto = Producto::with('categoria:idCategoria,categoria')->paginate(15);
     
         return Inertia::render('Producto/Index', [
             'producto' => $producto,
             'categoria' => $categoria
         ]);
         
-      //  return response()->json([
-     //       'producto' => $producto,
-     //       'categoria' => $categoria
-     //   ]);
+    //     return response()->json([
+     //        'producto' => $producto,
+     //        'categoria' => $categoria
+     //    ]);
     }
     
     public function store(Request $request)
     {
         // Validar los datos del formulario
         $request->validate([
-            'nombre' => 'required|max:90',
-            'duracion' => 'required|integer|max:90',  // Valida que 'duracion' sea un número entero
+            'producto' => 'required|max:90',
+            'idCategoria' => 'required|integer',  // Valida que 'duracion' sea un número entero
             'precio' => 'required|numeric',  // Valida que 'precio' sea un número decimal
-        
+            'stock' => 'required|integer',  // Valida que 'precio' sea un número decimal
+
             // Agrega más reglas de validación según sea necesario
         ]);
     
         // Verificar si ya existe un curso con el código proporcionado
 
-        $membresia = new Membresias();
-        $membresia->nombre = $request->nombre;  // Assigning the value 
-        $membresia->duracion = $request->duracion;  // Assigning the value of NombreCurso
-        $membresia->precio = $request->precio;  // Assigning the value of NombreCurso
-        $membresia->save();
+        $producto = new Producto();
+        $producto->producto = $request->producto;  // Assigning the value 
+        $producto->precio = $request->precio;  // Assigning the value of NombreCurso
+        $producto->idCategoria = $request->idCategoria;  // Assigning the value of NombreCurso
+
+        $producto->stock = $request->stock;  // Assigning the value of NombreCurso
+        $producto->save();
     
         // Redirigir a la página de índice de cursos u otra página
-        return redirect()->route('membresias.index');
+        return redirect()->route('productos.index');
        //  return response()->json([    'NombreCurso' => $request->NombreCurso, 'CodCurso' => $request->CodCurso]);
     }
 
     
-    public function destroy( $idMembresia)
+    public function destroy( $idProducto)
     {
-        $membresia = Membresias::where('idMembresia', $idMembresia)->first();
-        if ($membresia) {
-            $membresia->delete();
-            return redirect('membresias');
+        $producto = Producto::where('idProducto', $idProducto)->first();
+        if ($producto) {
+            $producto->delete();
+            return redirect('productos');
         } else {
             // Handle the case when the record doesn't exist
-            return redirect('membresias');
+            return redirect('productos');
         }
 
     }

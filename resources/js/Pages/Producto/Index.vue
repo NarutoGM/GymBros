@@ -21,7 +21,7 @@ const props= defineProps({
 	producto:{type:Object},flash:{type:Object},categoria:{type:Object}
 	
 });
-const form = useForm({idProducto:'',producto:'',precio:'',stock:'',categoria:''});
+const form = useForm({idProducto:'',producto:'',precio:'',stock:'',categoria:'',idCategoria:''});
 
 const v = ref({	producto:'',idCategoria:'',precio:'',stock:''});
 
@@ -84,7 +84,7 @@ const deletedCursos= (idProducto,producto) =>{
     }).then((result) => {
         if(result.isConfirmed) {
 		    
-            form.delete(route('producto.destroy',idProducto),{
+            form.delete(route('productos.destroy',idProducto),{
                 onSuccess: () => {ok('Categoria eliminada')}
             });
 			
@@ -92,24 +92,20 @@ const deletedCursos= (idProducto,producto) =>{
     });
 }
 
-
-
-
 const closeModalForm = () =>{
 	showModalForm.value = false;
 	form.reset();
 
 }
 
-
 const save = () => { 
     if (operation == 1) {
-        form.post(route('membresias.store'), {
-            onSuccess: () => { ok('Membresia creada') }
+        form.post(route('productos.store'), {
+            onSuccess: () => { ok('Producto creada') }
         });
     } else {
-        form.put(route('membresias.update', form.idMembresia), {
-            onSuccess: () => { ok('Membresia editada') }
+        form.put(route('productos.update', form.idProducto), {
+            onSuccess: () => { ok('Producto editada') }
         });
     }
 };
@@ -197,7 +193,7 @@ const onPageClick = (event)=>{
                 </tr>
             </thead>
             <tbody class="text-gray-900 font-bold divide-y dark:divide-gray-700 dark:bg-blue-50">
-                <tr v-for="(b, i) in producto.data" :key="b.dni" class="text-gray-500">
+                <tr v-for="(b, i) in producto.data" :key="b.idProducto" class="text-gray-500">
                     <td class="px-1 py-3 text-sm text-center">{{ b.producto }}</td>
                     <td class="px-1 py-3 text-sm text-center">{{ b.categoria.categoria }}</td>
                     <td class="px-1 py-3 text-sm text-center">{{ b.precio }}</td>
@@ -249,9 +245,12 @@ const onPageClick = (event)=>{
 
                     <span >CATEGORIA: </span>
 
-					<SelectInput :text="'CATEGORIA'" :require="'required'" v-model="form.idCategoria" :type="'text'" :Options="categoria">
+					<SelectInput :text="'CATEGORIA'" :require="'required'" v-model="form.idCategoria" :type="'text'" :options="categoria">
 						
-                        -
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                         <path stroke-linecap="round" stroke-linejoin="round" d="M3 3v1.5M3 21v-6m0 0 2.77-.693a9 9 0 0 1 6.208.682l.108.054a9 9 0 0 0 6.086.71l3.114-.732a48.524 48.524 0 0 1-.005-10.499l-3.11.732a9 9 0 0 1-6.085-.711l-.108-.054a9 9 0 0 0-6.208-.682L3 4.5M3 15V4.5" />
+                        </svg>
+
 
 
 					</SelectInput>
