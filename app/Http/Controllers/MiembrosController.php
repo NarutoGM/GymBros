@@ -7,6 +7,7 @@ use App\Models\Membresias;
 use App\Models\Miembros;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
+use Illuminate\Support\Facades\Storage;
 
 use function Laravel\Prompts\alert;
 
@@ -54,10 +55,12 @@ class MiembrosController extends Controller
 
     public function index(Request $request)
     {   
-        $miembros = Miembros::paginate(9);
-    
+        $membresias=Membresias::all();
+        $miembros = Miembros::with('membresias:idMembresia,nombre')->paginate(10);
+        
         return Inertia::render('Miembros/Index', [
-            'miembros' => $miembros
+            'miembros' => $miembros,
+            'membresias' => $membresias
         ]);
     }
     
