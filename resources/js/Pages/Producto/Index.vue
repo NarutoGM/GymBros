@@ -62,10 +62,6 @@ if (op===1){
 const openModalDel = (b) =>{
     form.idProducto = b.idProducto;
     form.producto = b.producto;
-    showModalDel.value=true;
-
-	
-	
      
 }
 
@@ -73,7 +69,8 @@ const closeModalDel = ()=>{
     showModalDel.value=false;
 }
 
-const deletedCursos= (idProducto,producto) =>{
+
+const deletedCursos= (idMembresia,nombre) =>{
     const alerta=Swal.mixin({
        buttonsStyling:true
     });
@@ -138,7 +135,7 @@ const onPageClick = (event)=>{
 </script>
 
 <template>
-	<Head title="PRODUCTO" />
+	<Head title="PRODUCTO"/>
 	
 	<AuthenticatedLayout>
 		<template #header>
@@ -148,7 +145,7 @@ const onPageClick = (event)=>{
 		<DIV class="pb-2 flex justify-between items-center">
 
 			
-<DarkButton @click="openModalForm(1)"> <div class="flex"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+<DarkButton> <div class="flex"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
   <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
 </svg>
 <P class="text-xl mx-2">NUEVO REGISTRO</P> 
@@ -205,6 +202,9 @@ const onPageClick = (event)=>{
                     <td class="px-1 py-3 text-sm text-center text-gray-700" :class="{  'bg-red-400': b.stock < 20,  'bg-green-400': b.stock >= 20  }"> {{ b.stock }}</td>
                     <td class="px-1 py-3 text-sm text-center">
                         <WarningButton @click="openModalForm(2, b)" >
+
+                    
+    
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10"/>
                             </svg>
@@ -287,6 +287,7 @@ const onPageClick = (event)=>{
 				<SecondaryButton @click="closeModalForm">Cancel</SecondaryButton>
 			</div>
 		</Modal>
+
    
 
         <Modal :show="showModalDel" @close="closeModalDel">
@@ -294,6 +295,7 @@ const onPageClick = (event)=>{
                   <p class="text-2xl text-gray-500">
                     Estas seguro de que deseas elimnar a 
                     <span class="text-2xl font-medium text-gray-900"></span> ? 
+                    <span class="text-2xl font-medium text-gray-900">{{ b.nombre }}</span> ? 
                 </p>
                 <PrimaryButton @click="deletedCursos">Si, eliminar</PrimaryButton>   
             </div>
