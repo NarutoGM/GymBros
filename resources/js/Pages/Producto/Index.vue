@@ -21,12 +21,11 @@ const props= defineProps({
 	producto:{type:Object},flash:{type:Object},categoria:{type:Object}
 	
 });
-const form = useForm({idProducto:'',producto:'',precio:'',stock:'',categoria:'',idCategoria:''});
+const form = useForm({producto:'',precio:'',stock:'',categoria:'',idCategoria:''});
 
 const v = ref({	producto:'',idCategoria:'',precio:'',stock:''});
 
 
-const showModalDel = ref(false);
 const showModalForm = ref(false);
 let operation = ref(1);
 
@@ -54,20 +53,11 @@ if (op===1){
     form.producto=b.producto;
     form.precio=b.precio;
     form.stock=b.stock;
+    form.idProducto=b.idProducto;
 
 
 }
  
-}
-
-const openModalDel = (b) =>{
-    form.idProducto = b.idProducto;
-    form.producto = b.producto;
-     
-}
-
-const closeModalDel = ()=>{
-    showModalDel.value=false;
 }
 
 
@@ -101,11 +91,11 @@ const closeModalForm = () =>{
 const save = () => { 
     if (operation == 1) {
         form.post(route('productos.store'), {
-            onSuccess: () => { ok('Producto creada') }
+            onSuccess: () => { ok('Producto creado') }
         });
     } else {
         form.put(route('productos.update', form.idProducto), {
-            onSuccess: () => { ok('Producto editada') }
+            onSuccess: () => { ok('Producto editado') }
         });
     }
 };
@@ -293,19 +283,7 @@ const onPageClick = (event)=>{
 
    
 
-        <Modal :show="showModalDel" @close="closeModalDel">
-            <div class="p-6">
-                  <p class="text-2xl text-gray-500">
-                    Estas seguro de que deseas eliminar a 
-                    <span class="text-2xl font-medium text-gray-900"></span> ? 
-                    <span class="text-2xl font-medium text-gray-900">{{ b.nombre }}</span> ? 
-                </p>
-                <PrimaryButton @click="deletedCursos">Si, eliminar</PrimaryButton>   
-            </div>
-            <div class="m-6 flex justify-end">
-                <SecondaryButton @click="closeModalDel">Cancel</SecondaryButton>
-            </div>
-        </Modal>
+   
 		
 	</AuthenticatedLayout>
 </template>
