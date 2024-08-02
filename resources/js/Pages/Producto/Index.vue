@@ -296,7 +296,7 @@ const onPageClick = (event)=>{
         <Modal :show="showModalDel" @close="closeModalDel">
             <div class="p-6">
                   <p class="text-2xl text-gray-500">
-                    Estas seguro de que deseas elimnar a 
+                    Estas seguro de que deseas eliminar a 
                     <span class="text-2xl font-medium text-gray-900"></span> ? 
                     <span class="text-2xl font-medium text-gray-900">{{ b.nombre }}</span> ? 
                 </p>

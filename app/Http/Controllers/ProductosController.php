@@ -20,33 +20,34 @@ class ProductosController extends Controller
 
     }
 
-    public function update(Request $request, $idMembresia)
+    public function update(Request $request, $idProducto)
     {
         $request->validate([
-            'nombre' => 'required|max:90',
-            'duracion' => 'required|integer|max:90',  // Valida que 'duracion' sea un número entero
+            'producto' => 'required|max:90',
+            'idCategoria' => 'required|integer',  // Valida que 'duracion' sea un número entero
             'precio' => 'required|numeric',  // Valida que 'precio' sea un número decimal
-        
+            'stock' => 'required|integer',  // Valida que 'precio' sea un número decimal
+
             // Agrega más reglas de validación según sea necesario
         ]);
     
         // Buscar el curso por su CodCurso
-        $membresia = Membresias::where('idMembresia', $idMembresia)->firstOrFail();
+        $producto = Producto::where('idProducto', $idProducto)->firstOrFail();
     
-        $membresia->nombre = $request->nombre;  // Assigning the value 
-        $membresia->duracion = $request->duracion;  // Assigning the value of NombreCurso
-        $membresia->precio = $request->precio;  // Assigning the value of NombreCurso
-        $membresia->save();
+        $producto->producto = $request->producto;  // Assigning the value 
+        $producto->precio = $request->precio;  // Assigning the value of NombreCurso
+        $producto->stock = $request->stock;  // Assigning the value of NombreCurso
+        $producto->save();
     
         // Redireccionar a la vista de índice de cursos
-        return redirect()->route('membresias.index');
+        return redirect()->route('productos.index');
     }
     
 
 
     public function create()
     {
-        return view('membresias.create');
+        return view('productos.create');
     }
 
 
