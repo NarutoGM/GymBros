@@ -19,6 +19,9 @@ const props= defineProps({
 	miembros:{type:Object},flash:{type:Object}
 	
 });
+
+
+
 const form = useForm({dni:'',nombre:''});
 
 const v = ref({	nombre:'',duracion:'',precio:'',idMembresia:''});
@@ -116,8 +119,36 @@ const formPage = useForm({});
 const onPageClick = (event)=>{
     formPage.get(route('membresias.index',{page:event}));
 }
-</script>
 
+
+
+
+</script>
+<script>
+export default {
+  props: ['b'], // Asegúrate de recibir el prop 'b' si es necesario
+  methods: {
+    isActivo(fechaInicio, fechaFin) {
+      const hoy = new Date();
+      return fechaInicio && fechaFin && new Date(fechaInicio) <= hoy && hoy <= new Date(fechaFin);
+    },
+    isVencido(fechaFin) {
+      const hoy = new Date();
+      return fechaFin && new Date(fechaFin) < hoy;
+    },
+    getStatusMessage(fechaInicio, fechaFin) {
+      if (!fechaInicio) {
+        return 'Asignar Matrícula';
+      } else if (this.isActivo(fechaInicio, fechaFin)) {
+        return 'Activo';
+      } else if (this.isVencido(fechaFin)) {
+        return 'RENOVAR';
+      }
+      return '';
+    },
+  },
+};
+</script>
 <template>
 	<Head title="MEMBRESIAS" />
 	
@@ -185,12 +216,23 @@ const onPageClick = (event)=>{
                 <tr v-for="(b, i) in miembros.data" :key="b.dni" class="text-gray-500">
                     <td class="px-1 py-3 text-sm text-center">{{ b.dni }}</td>
                     <td class="px-1 py-3 text-sm text-center">{{ b.nombre }}</td>
-                    <td class="px-1 py-3 text-sm text-center bg-green-400 text-gray-700">{{ b.estado }}</td>
+
+                    <td class="px-1 py-3 text-sm text-center"  :class="{
+    'bg-orange-400 text-white': !b.fechaInicio,'bg-green-400 text-white': isActivo(b.fechaInicio, b.fechaFin),'bg-red-400 text-white': isVencido(b.fechaFin),}">
+
+  {{ getStatusMessage(b.fechaInicio, b.fechaFin) }}
+</td>
 
                     <td class="px-1 py-3 text-sm text-center">{{ b.telefono }}</td>
                     <td class="px-1 py-3 text-sm text-center">{{ b.fechaInicio }}</td>
                     <td class="px-1 py-3 text-sm text-center">{{ b.fechaFin }}</td>
-                    <td class="px-1 py-3 text-sm text-center">{{ b.membresias.nombre  }}</td>
+
+                    <td class="px-1 py-3 text-sm text-center">
+                            {{ b.membresias ? b.membresias.nombre : '' }}
+                    </td>
+
+
+
 
                     <td class="px-1 py-3 text-sm text-center">
                         <WarningButton >
@@ -210,6 +252,10 @@ const onPageClick = (event)=>{
             </tbody>
         </table>
     </div>
+    <div
+					class="px-4 py-3 text-xs font-semibold tracking-wide text-gray-500 uppercase bg-gray-50 border-t sm:grid-cols-9">
+					<pagination :links="miembros.links" />
+				</div>
 </div>
 
    

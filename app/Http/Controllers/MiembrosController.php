@@ -56,7 +56,7 @@ class MiembrosController extends Controller
     public function index(Request $request)
     {   
         $membresias=Membresias::all();
-        $miembros = Miembros::with('membresias:idMembresia,nombre')->paginate(10);
+        $miembros = Miembros::with('membresias:idMembresia,nombre')->paginate(1);
         
         return Inertia::render('Miembros/Index', [
             'miembros' => $miembros,
