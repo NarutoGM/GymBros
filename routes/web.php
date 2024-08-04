@@ -36,6 +36,8 @@ Route::get('/', function () {
 
 
 */
+
+
 Route::get('/', [AuthenticatedSessionController::class, 'create'])->name('login');
 
 Route::get('/dashboard', function () {
