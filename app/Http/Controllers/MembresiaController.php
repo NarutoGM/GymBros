@@ -65,7 +65,7 @@ class MembresiaController extends Controller
         // Validar los datos del formulario
         $request->validate([
             'nombre' => 'required|max:90',
-            'duracion' => 'required|integer|max:90',  // Valida que 'duracion' sea un número entero
+            'duracion' => 'required|integer',  // Valida que 'duracion' sea un número entero
             'precio' => 'required|numeric',  // Valida que 'precio' sea un número decimal
         
             // Agrega más reglas de validación según sea necesario
