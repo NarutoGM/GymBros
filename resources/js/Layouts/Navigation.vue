@@ -84,11 +84,10 @@
           </NavLink>
         </li>
 
-
         
          <li class="relative px-6 py-3">
 
-          <NavLink :href="route('ventas.index')" :active="route().current('ventas.index')">
+          <NavLink :href="route('membresias.index')" :active="route().current('membresias.index')">
             <template #icon>
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                 stroke="currentColor" class="size-6">
