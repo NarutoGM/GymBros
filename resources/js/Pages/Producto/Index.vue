@@ -117,7 +117,7 @@ const ok = (m) => {
 const formPage = useForm({});
 
 const onPageClick = (event)=>{
-    formPage.get(route('membresias.index',{page:event}));
+    formPage.get(route('productos.index',{page:event}));
 }
 </script>
 
