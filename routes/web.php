@@ -12,6 +12,7 @@ use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
+use App\Models\Membresias;
 use App\Models\Miembros;
 
 /*
@@ -51,6 +52,7 @@ Route::middleware('auth')->group(function () {
     Route::resource('/productos', ProductosController::class);
     Route::resource('/categorias', CategoriasController::class);
     Route::resource('/ventas', VentasController::class);
+    Route::resource('/membresias', Membresias::class);
 
     Route::resource('/miembros', MiembrosController::class);
 
