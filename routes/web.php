@@ -5,6 +5,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\CategoriasController;
 use App\Http\Controllers\ProductosController;
 use App\Http\Controllers\VentasController;
+use App\Http\Controllers\MembresiaController;
 
 use App\Http\Controllers\MiembrosController;
 
@@ -52,7 +53,7 @@ Route::middleware('auth')->group(function () {
     Route::resource('/productos', ProductosController::class);
     Route::resource('/categorias', CategoriasController::class);
     Route::resource('/ventas', VentasController::class);
-    Route::resource('/membresias', Membresias::class);
+    Route::resource('/membresias', MembresiaController::class);
 
     Route::resource('/miembros', MiembrosController::class);
 
