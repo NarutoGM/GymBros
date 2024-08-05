@@ -20,7 +20,18 @@ class MiembrosController extends Controller
     {
 
     }
-
+    
+    public function show(string $dni)
+    {
+        $miembros = Miembros::with('membresias:idMembresia,nombre')
+            ->where('dni', $dni)
+            ->first();
+    
+        return Inertia::render('Miembros/Show', [
+            'miembros' => $miembros,
+        ]);
+    }
+    
     public function update(Request $request, $idMembresia)
     {
         $request->validate([
@@ -89,15 +100,15 @@ class MiembrosController extends Controller
     }
 
     
-    public function destroy( $idMembresia)
+    public function destroy( $dni)
     {
-        $membresia = Membresias::where('idMembresia', $idMembresia)->first();
-        if ($membresia) {
-            $membresia->delete();
-            return redirect('membresias');
+        $miembros = Miembros::where('dni', $dni)->first();
+        if ($miembros) {
+            $miembros->delete();
+            return redirect('miembros')->with('success','Book deleted');
         } else {
             // Handle the case when the record doesn't exist
-            return redirect('membresias');
+            return redirect('miembros');
         }
 
     }
