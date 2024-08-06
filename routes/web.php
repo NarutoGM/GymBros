@@ -26,8 +26,6 @@ use App\Models\Miembros;
 | contains the "web" middleware group. Now create something great!
 |
 
-*/
-
 Route::get('/', function () {
     return Inertia::render('Welcome', [
         'canLogin' => Route::has('login'),
@@ -40,6 +38,8 @@ Route::get('/', function () {
 
 
 */
+
+
 Route::get('/', [AuthenticatedSessionController::class, 'create'])->name('login');
 
 Route::get('/dashboard', function () {
@@ -62,4 +62,4 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-require __DIR__.'/auth.php';
+require _DIR_.'/auth.php';
