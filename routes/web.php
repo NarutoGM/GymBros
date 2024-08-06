@@ -5,6 +5,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\CategoriasController;
 use App\Http\Controllers\ProductosController;
 use App\Http\Controllers\VentasController;
+use App\Http\Controllers\MembresiaController;
 
 use App\Http\Controllers\MiembrosController;
 
@@ -12,6 +13,7 @@ use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
+use App\Models\Membresias;
 use App\Models\Miembros;
 
 /*
@@ -37,7 +39,7 @@ Route::get('/', function () {
 
 
 
-
+*/
 Route::get('/', [AuthenticatedSessionController::class, 'create'])->name('login');
 
 Route::get('/dashboard', function () {
@@ -51,6 +53,7 @@ Route::middleware('auth')->group(function () {
     Route::resource('/productos', ProductosController::class);
     Route::resource('/categorias', CategoriasController::class);
     Route::resource('/ventas', VentasController::class);
+    Route::resource('/membresias', MembresiaController::class);
 
     Route::resource('/miembros', MiembrosController::class);
 

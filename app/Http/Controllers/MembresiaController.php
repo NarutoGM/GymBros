@@ -4,34 +4,21 @@ namespace App\Http\Controllers;
 
 use App\Models\Cursos;
 use App\Models\Membresias;
-use App\Models\Miembros;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
-use Illuminate\Support\Facades\Storage;
 
 use function Laravel\Prompts\alert;
 
 
 
-class MiembrosController extends Controller
+class MembresiaController extends Controller
 {
     const PAGINATION =25;
   public function edit(Request $request,$CodCurso)
     {
 
     }
-    
-    public function show(string $dni)
-    {
-        $miembros = Miembros::with('membresias:idMembresia,nombre')
-            ->where('dni', $dni)
-            ->first();
-    
-        return Inertia::render('Miembros/Show', [
-            'miembros' => $miembros,
-        ]);
-    }
-    
+
     public function update(Request $request, $idMembresia)
     {
         $request->validate([
@@ -65,13 +52,11 @@ class MiembrosController extends Controller
 
 
     public function index(Request $request)
-    {   
-        $membresias=Membresias::all();
-        $miembros = Miembros::with('membresias:idMembresia,nombre')->paginate(1);
-        
-        return Inertia::render('Miembros/Index', [
-            'miembros' => $miembros,
-            'membresias' => $membresias
+    {
+        $membresia = Membresias::orderBy('idMembresia', 'asc')->paginate(9);
+    
+        return Inertia::render('Membresias/Index', [
+            'membresia' => $membresia
         ]);
     }
     
@@ -80,7 +65,7 @@ class MiembrosController extends Controller
         // Validar los datos del formulario
         $request->validate([
             'nombre' => 'required|max:90',
-            'duracion' => 'required|integer|max:90',  // Valida que 'duracion' sea un número entero
+            'duracion' => 'required|integer',  // Valida que 'duracion' sea un número entero
             'precio' => 'required|numeric',  // Valida que 'precio' sea un número decimal
         
             // Agrega más reglas de validación según sea necesario
@@ -100,15 +85,15 @@ class MiembrosController extends Controller
     }
 
     
-    public function destroy( $dni)
+    public function destroy( $idMembresia)
     {
-        $miembros = Miembros::where('dni', $dni)->first();
-        if ($miembros) {
-            $miembros->delete();
-            return redirect('miembros')->with('success','Book deleted');
+        $membresia = Membresias::where('idMembresia', $idMembresia)->first();
+        if ($membresia) {
+            $membresia->delete();
+            return redirect('membresias');
         } else {
             // Handle the case when the record doesn't exist
-            return redirect('miembros');
+            return redirect('membresias');
         }
 
     }
