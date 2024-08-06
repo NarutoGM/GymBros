@@ -16,9 +16,11 @@ use function Laravel\Prompts\alert;
 class MiembrosController extends Controller
 {
     const PAGINATION =25;
-  public function edit(Request $request,$CodCurso)
+  public function edit(Request $request,$dni)
     {
-
+        return Inertia::render('Miembros/Edit', [
+            'dni' => $dni,
+        ]);
     }
     
     public function show(string $dni)
@@ -32,7 +34,7 @@ class MiembrosController extends Controller
         ]);
     }
     
-    public function update(Request $request, $idMembresia)
+    public function update(string $dni)
     {
         $request->validate([
             'nombre' => 'required|max:90',
@@ -58,7 +60,7 @@ class MiembrosController extends Controller
 
     public function create()
     {
-        return view('membresias.create');
+        return Inertia::render('Miembros/Create');
     }
 
 
