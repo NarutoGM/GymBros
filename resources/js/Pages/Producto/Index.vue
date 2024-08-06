@@ -189,6 +189,7 @@ const onPageClick = (event)=>{
                     <td class="px-1 py-3 text-sm text-center">{{ b.precio }}</td>
 
                     <td class="px-1 py-3 text-sm text-center text-gray-700" :class="{  'bg-red-400': b.stock < 20,  'bg-green-400': b.stock >= 20  }"> {{ b.stock }}</td>
+                    
                     <td class="px-1 py-3 text-sm text-center">
                         <WarningButton @click="openModalForm(2, b)" >
 
