@@ -18,8 +18,13 @@ class MiembrosController extends Controller
     const PAGINATION =25;
   public function edit(Request $request,$dni)
     {
+        $miembro = Miembros::where('dni', $dni)->first();
+        $membresias=Membresias::all();
+
         return Inertia::render('Miembros/Edit', [
-            'dni' => $dni,
+            'miembro' => $miembro,
+            'membresias' => $membresias, 
+            'membresiasOfMiembros' => $miembro->membresias,
         ]);
     }
     
@@ -69,7 +74,7 @@ class MiembrosController extends Controller
     public function index(Request $request)
     {   
         $membresias=Membresias::all();
-        $miembros = Miembros::with('membresias:idMembresia,nombre')->paginate(1);
+        $miembros = Miembros::with('membresias:idMembresia,nombre')->paginate(2);
         
         return Inertia::render('Miembros/Index', [
             'miembros' => $miembros,
@@ -107,7 +112,7 @@ class MiembrosController extends Controller
         $miembros = Miembros::where('dni', $dni)->first();
         if ($miembros) {
             $miembros->delete();
-            return redirect('miembros')->with('success','Book deleted');
+            return redirect('miembros')->with('success','Miembro eliminado');
         } else {
             // Handle the case when the record doesn't exist
             return redirect('miembros');

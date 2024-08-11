@@ -39,7 +39,8 @@ export default {
 	<AuthenticatedLayout>
 		<template #header>
             <div class="inline-flex overflow-hidden mb-4 w-full items-center justify-between">
-                {{ miembros.nombre }} //             <p>  <span>              <p>MEMBRESIA: {{ miembros.membresias.nombre }} // <span><td class="px-1 py-3 text-sm text-center"  :class="{
+                {{ miembros.nombre }} //             
+                <p>  <span v-if="miembros.membresias && miembros.membresias.nombre">              <p>MEMBRESIA: {{ miembros.membresias.nombre }} // <span><td class="px-1 py-3 text-sm text-center"  :class="{
     'bg-orange-400 text-white': !miembros.fechaInicio,'bg-green-400 text-white': isActivo(miembros.fechaInicio, miembros.fechaFin),'bg-red-400 text-white': isVencido(miembros.fechaFin),}">
 
   {{ getStatusMessage(miembros.fechaInicio, miembros.fechaFin) }}

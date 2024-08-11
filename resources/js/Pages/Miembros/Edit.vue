@@ -1,13 +1,14 @@
 <script setup>
 import Form from './Form.vue';
 const props = defineProps({
-     miembros:{}
+     membresias:{type:Object},
+     miembro: {type:Object}
 });
 </script>
 
 
 <template>
-    <Form >
+    <Form>
         
     </Form>
 </template>    
