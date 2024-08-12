@@ -186,6 +186,8 @@ export default {
 <P class="text-xl mx-2">NUEVO REGISTRO</P> 
 	</div>
 		</DarkButton>
+
+        
 		<vueTailwindPaginationUmd class="relative" 
        :current="miembros.currentPage" :total="miembros.total" 
        :per-page="miembros.perPage"

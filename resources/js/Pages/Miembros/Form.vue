@@ -1,15 +1,33 @@
 <script setup>
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
-import { Head } from '@inertiajs/vue3';
+import { Head, useForm } from '@inertiajs/vue3';
 import NavLink from '@/Components/NavLink.vue';
 import DarkButton from '@/Components/DarkButton.vue';
+import PrimaryButton from '@/Components/PrimaryButton.vue';
+import InputGroup from '@/Components/InputGroup.vue';
+import InputError from '@/Components/InputError.vue';
+import { ref } from 'vue';
 
 const props = defineProps({
-    miembros:{type:Object}
+miembros:{type:Object},
+membresias:{type:Object},
+membresiasOfMiembros:{type:Object}
 });
 
+const form = useForm({
+ dni:'', nombre: '', direccion: '', telefono: '', edad: '', nombreContacto: '', enfermedad: '', institucion: '', fechaRegistro: '', fechaInicio: '', fechaFin: '',membresias:[]
 
+})
 
+const title_form = ref(
+
+  (props.miembros==null) ? 'Registrar un nuevo miembro' : 'Editar informacion de un miembro'
+
+);
+
+const req = ref('required');
+const msj = ref('');
+const classMsj = ref('hidden');
 </script>
 <script>
 export default {
@@ -37,21 +55,14 @@ export default {
 };
 </script>
 <template>
+
 	<Head title="MEMBRESIAS" />
 	
 	<AuthenticatedLayout>
 		<template #header>
+                {{ title_form }} 
+
             <div class="inline-flex overflow-hidden mb-4 w-full items-center justify-between">
-                {{ miembros.nombre }} //            
-                 <p>  <span v-if="miembros.membresias && miembros.membresias.nombre">              <p>MEMBRESIA: {{ miembros.membresias.nombre }} // <span><td class="px-1 py-3 text-sm text-center"  :class="{
-    'bg-orange-400 text-white': !miembros.fechaInicio,'bg-green-400 text-white': isActivo(miembros.fechaInicio, miembros.fechaFin),'bg-red-400 text-white': isVencido(miembros.fechaFin),}">
-
-  {{ getStatusMessage(miembros.fechaInicio, miembros.fechaFin) }}
-</td></span></p>
-            </span></p>
-
-
-
                 <NavLink :href="route('miembros.index')">
                     <DarkButton>
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
@@ -60,9 +71,6 @@ export default {
 
                     </DarkButton>
                   </NavLink>
-                  
-
-
             </div>
 
 
@@ -74,10 +82,39 @@ export default {
         <p class="mb-2">INFORMACIÓN PERSONAL:</p> <!-- Espacio debajo del título -->
     </div>
 
-    <div class="min-w-0 p-4 rounded-lg shadow-xs">
-        <p class="font-medium">DNI:</p> <!-- Estilo opcional para distinguir el título del concepto -->
-        <p>{{ miembros.dni }}</p>
+   
+    <div class="min-w-0 px-4 rounded-lg shadow-xs">
+        <form class="mt-6  space-y-3 max-w-xl">
+            <div class="min-w-0  rounded-lg shadow-xs">
+        <p class="font-medium">DNI:</p>
+    </div> 
+
+
+           <InputGroup :text="'DNI'" :required="'required'" v-model="form.dni">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+  <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 8.25h19.5M2.25 9h19.5m-16.5 5.25h6m-6 2.25h3m-3.75 3h15a2.25 2.25 0 0 0 2.25-2.25V6.75A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25v10.5A2.25 2.25 0 0 0 4.5 19.5Z" />
+</svg>
+
+        </InputGroup>
+           <InputError :message="form.errors.dni"></InputError>
+
+           <div class="min-w-0  rounded-lg shadow-xs">
+        <p class="font-medium">DIRECCION:</p>
+    </div> 
+           <InputGroup :text="'DIRECCION:'" :required="'required'" v-model="form.direccion">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+  <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 8.25h19.5M2.25 9h19.5m-16.5 5.25h6m-6 2.25h3m-3.75 3h15a2.25 2.25 0 0 0 2.25-2.25V6.75A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25v10.5A2.25 2.25 0 0 0 4.5 19.5Z" />
+</svg>
+
+        </InputGroup>
+           <InputError :message="form.errors.direccion"></InputError>
+
+        </form>
     </div>
+
+
+ 
+   
     <div class="min-w-0 p-4 rounded-lg shadow-xs">
         <p class="font-medium">DIRECCIÓN:</p>
         <p>{{ miembros.direccion }}</p>
