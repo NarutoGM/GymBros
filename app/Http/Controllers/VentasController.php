@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Categoria;
 use App\Models\Membresias;
+use App\Models\User;
 use App\Models\Ventas;
 use COM;
 use Illuminate\Http\Request;
@@ -55,11 +56,14 @@ class VentasController extends Controller
 
     public function index(Request $request)
     {
-        $ventas = Ventas::orderBy('idVentas', 'asc')->paginate(9);
-    
+        $user=User::all();
+        $ventas = Ventas::with('user:id,name')->paginate(15);
+
+    //   return response()->json([    'ventas' => $ventas]);
+
         return Inertia::render('Ventas/Index', [
             'ventas' => $ventas
-        ]);
+            ]);
     }
     
     public function store(Request $request)

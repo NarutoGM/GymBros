@@ -10,6 +10,7 @@ use Illuminate\Notifications\Notifiable;
 class User extends Authenticatable
 {
     use HasFactory, Notifiable;
+    protected $primaryKey = 'id';
 
     /**
      * The attributes that are mass assignable.
@@ -17,6 +18,7 @@ class User extends Authenticatable
      * @var array<int, string>
      */
     protected $fillable = [
+        
         'name',
         'email',
         'password',
@@ -44,4 +46,11 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+
+    public function ventas()
+{
+    return $this->hasMany(Ventas::class);
+}
+
 }

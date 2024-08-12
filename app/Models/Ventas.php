@@ -21,5 +21,10 @@ class Ventas extends Model
         return $this->hasMany(Detalle_venta::class, 'idVentas', 'idVentas');
     }
 
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'id', 'id'); // 'id' en 'Ventas' es la clave foránea que apunta al 'id' en 'users'
+    }
+
 }
 
