@@ -48,7 +48,7 @@ class VentasController extends Controller
 
     public function create()
     {
-        return view('membresias.create');
+        return Inertia::render('Ventas/Create');
     }
 
 

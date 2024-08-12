@@ -83,8 +83,8 @@ export default {
     </div>
 
    
-    <div class="min-w-0 px-4 rounded-lg shadow-xs">
-        <form class="mt-6 space-y-3 max-w-full">
+                <div class="min-w-0 px-4 rounded-lg shadow-xs">
+                    <form class="mt-6 space-y-3 max-w-full">
                         <!-- DNI -->
                         <div class="flex items-center">
                             <div class="min-w-0 rounded-lg shadow-xs">
@@ -203,77 +203,6 @@ export default {
                     </form>
                 </div>
             </div>
-
-            <!-- Sección 2: Información de Membresías -->
-            <div class="space-y-0">
-                <div class="min-w-0 font-bold text-gray-700 text-xl p-4 rounded-lg shadow-xs">
-                    <p class="mb-2">MEMBRESÍAS:</p>
-                </div>
-
-                <div class="min-w-0 px-4 rounded-lg shadow-xs">
-                    <form class="mt-6 space-y-3 max-w-full">
-                        <!-- Fecha de Registro -->
-                        <div>
-                            <div class="min-w-0 rounded-lg shadow-xs">
-                                <p class="font-medium">FECHA DE REGISTRO:</p>
-                            </div>
-
-                            <InputGroup :text="'FECHA DE REGISTRO'" :required="req" v-model="form.fechaRegistro">
-                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3.75V6M17.25 3.75V6m-10.5 0h10.5M3.75 9.75h16.5m-16.5 9h16.5M8.25 12h7.5m-7.5 3h4.5" />
-                                </svg>
-                            </InputGroup>
-                            <InputError :message="form.errors.fechaRegistro"></InputError>
-                        </div>
-
-                        <!-- Fecha de Inicio -->
-                        <div>
-                            <div class="min-w-0 rounded-lg shadow-xs">
-                                <p class="font-medium">FECHA DE INICIO:</p>
-                            </div>
-
-                            <InputGroup :text="'FECHA DE INICIO'" :required="req" v-model="form.fechaInicio">
-                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M21 7.5V6.375c0-.621-.504-1.125-1.125-1.125h-.75V3.75a.75.75 0 0 0-1.5 0v1.5h-2.25V3.75a.75.75 0 0 0-1.5 0v1.5h-3V3.75a.75.75 0 0 0-1.5 0v1.5H7.875V3.75a.75.75 0 0 0-1.5 0v1.5h-.75c-.621 0-1.125.504-1.125 1.125v1.125M3.75 7.5v12.75c0 1.242.758 2.25 1.875 2.25h12.75c1.117 0 1.875-1.008 1.875-2.25V7.5H3.75Z" />
-                                </svg>
-                            </InputGroup>
-                            <InputError :message="form.errors.fechaInicio"></InputError>
-                        </div>
-
-                        <!-- Fecha de Finalización -->
-                        <div>
-                            <div class="min-w-0 rounded-lg shadow-xs">
-                                <p class="font-medium">FECHA DE FINALIZACIÓN:</p>
-                            </div>
-
-                            <InputGroup :text="'FECHA DE FINALIZACIÓN'" :required="req" v-model="form.fechaFinalizacion">
-                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 7.5v12.75c0 1.242.758 2.25 1.875 2.25h12.75c1.117 0 1.875-1.008 1.875-2.25V7.5M3.75 7.5H20.25M6 5.25h12M8.25 3v1.5M15.75 3v1.5" />
-                                </svg>
-                            </InputGroup>
-                            <InputError :message="form.errors.fechaFinalizacion"></InputError>
-                        </div>
-
-                        <!-- Nivel de Membresía -->
-                        <div>
-                            <div class="min-w-0 rounded-lg shadow-xs">
-                                <p class="font-medium">NIVEL DE MEMBRESÍA:</p>
-                            </div>
-
-                            <InputGroup :text="'NIVEL DE MEMBRESÍA'" :required="req" v-model="form.nivelMembresia">
-                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 3.75l2.696 5.46 6.029.878-4.363 4.254 1.029 6.004-5.391-2.835-5.391 2.835 1.029-6.004-4.363-4.254 6.029-.878L12 3.75z" />
-                                </svg>
-                            </InputGroup>
-                            <InputError :message="form.errors.nivelMembresia"></InputError>
-                        </div>
-                    </form>
-    </div>
-
-</div>
-
-
-    <!-- Columna 2: En Caso de Accidente Contactar -->
     
 </div>
 
