@@ -18,14 +18,17 @@ class MiembrosController extends Controller
     const PAGINATION =25;
   public function edit(Request $request,$dni)
     {
-        $miembro = Miembros::where('dni', $dni)->first();
+        $miembros = Miembros::where('dni', $dni)->first();
         $membresias=Membresias::all();
 
         return Inertia::render('Miembros/Edit', [
-            'miembro' => $miembro,
+            'miembros' => $miembros,
             'membresias' => $membresias, 
-            'membresiasOfMiembros' => $miembro->membresias,
+            'membresiasOfMiembros' => $miembros->membresias,
         ]);
+
+     //   return response()->json([    'miembros' => $miembros, 'membresias' => $membresias,'membresiasOfMiembros' => $miembros->membresias]);
+
     }
     
     public function show(string $dni)
