@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Categoria;
 use App\Models\Membresias;
+use App\Models\Ventas;
 use COM;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -54,10 +55,10 @@ class VentasController extends Controller
 
     public function index(Request $request)
     {
-        $categoria = Categoria::orderBy('idCategoria', 'asc')->paginate(9);
+        $ventas = Ventas::orderBy('idVentas', 'asc')->paginate(9);
     
-        return Inertia::render('Categoria/Index', [
-            'categoria' => $categoria
+        return Inertia::render('Ventas/Index', [
+            'ventas' => $ventas
         ]);
     }
     
