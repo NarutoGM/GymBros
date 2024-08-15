@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Categoria;
 use App\Models\Membresias;
+use App\Models\Producto;
 use App\Models\User;
 use App\Models\Ventas;
 use COM;
@@ -47,8 +48,14 @@ class VentasController extends Controller
 
 
     public function create()
-    {
-        return Inertia::render('Ventas/Create');
+    { 
+        $productos=Producto::all();
+
+        return Inertia::render('Ventas/Create', [
+            'productos' => $productos
+            ]);
+   // return response()->json([    'productos' => $productos]);
+
     }
 
 
