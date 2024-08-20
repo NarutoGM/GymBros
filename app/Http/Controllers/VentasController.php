@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Categoria;
 use App\Models\Detalle_venta;
 use App\Models\Membresias;
+use App\Models\Movimientos;
 use App\Models\Producto;
 use App\Models\User;
 use App\Models\Ventas;
@@ -73,21 +74,29 @@ class VentasController extends Controller
             'ventas' => $ventas
             ]);
     }
+  //  public function store(Request $request)
+ //   {
+        // Obtener el contenido del arreglo 'productos'
+  //      $productos = $request->input('productos');
     
+        // Retornar el contenido en formato JSON
+  //      return response()->json($productos);
+ //   }
+      
     public function store(Request $request)
     {
         // Validación (opcional)
-        $request->validate([
-            'tipofacturacion' => 'required|string',
-            'montobruto' => 'required|numeric',
-            'igv' => 'required|numeric',
-            'montoneto' => 'required|numeric',
-            'cliente' => 'required|string',
-            'productos' => 'required|array',
-            'productos.*.idProducto' => 'required|integer',
-            'productos.*.precio' => 'required|numeric',
-            'productos.*.cantidad' => 'required|integer',
-        ]);
+      //  $request->validate([
+    //        'tipofacturacion' => 'required|string',
+   //         'montobruto' => 'required|numeric',
+     //       'igv' => 'required|numeric',
+      //      'montoneto' => 'required|numeric',
+      //      'cliente' => 'required|string',
+      //      'productos' => 'required|array',
+      //      'productos.*.idProducto' => 'required|integer',
+       //     'productos.*.precio' => 'required|numeric',
+      //      'productos.*.cantidad' => 'required|integer',
+       // ]);
     
         // Crear la venta
         $venta = new Ventas();
@@ -97,28 +106,38 @@ class VentasController extends Controller
         $venta->montobruto = $request->montobruto;  // Asignar el valor 
         $venta->igv = $request->igv;  // Asignar el valor 
         $venta->montoneto = $request->montoneto;  // Asignar el valor 
-        $venta->cliente = $request->cliente;  // Asignar el valor 
+       $venta->cliente = $request->cliente;  // Asignar el valor 
     
         // Guardar la venta para obtener el idVentas
-        $venta->save();
-    
-        // Crear los detalles de la venta
+            $venta->save();
+
         foreach ($request->productos as $producto) {
-            if (is_array($producto) && isset($producto['idProducto'], $producto['precio'], $producto['cantidad'])) {
                 $detalleventa = new Detalle_venta();
-                $detalleventa->idVentas = $venta->idVentas;  // Asignar el valor 
-                $detalleventa->idProducto = $producto['idProducto'];  // Asignar el valor 
-                $detalleventa->precio = $producto['precio'];  // Asignar el valor 
-                $detalleventa->cantidad = $producto['cantidad'];  // Asignar el valor 
+                $detalleventa->idVentas = $venta->idVentas;  // Asignar el id de la venta guardada
+                $detalleventa->idProducto = $producto['idProducto'];  // Asignar el id del producto
+                $detalleventa->precio = $producto['precio'];  // Asignar el precio del producto
+                $detalleventa->cantidad = $producto['cantidad'];  // Asignar la cantidad del producto
                 $detalleventa->save();
-            } else {
-                // Manejo de errores si $producto no es válido
-                return redirect()->back()->withErrors('Error en los productos enviados.');
+
+                $p = Producto::where('idProducto', $producto['idProducto'])->firstOrFail();
+                $p->stock= $p->stock - $producto['cantidad'];
+
+
+                $movimiento = new Movimientos();
+                $movimiento->fecha = now(); // Usa la fecha y hora actuales
+                $movimiento->tipo = 'S';
+                $movimiento->cantidad = $producto['cantidad'];
+                $movimiento->stock = $p->stock;
+                $movimiento->idProducto = $producto['idProducto']; ;
+                $movimiento->id = auth()->id(); // Asegúrate de que el campo en tu tabla se llama 'user_id' o similar
+    
+                $movimiento->save();
             }
-        }
+
+
         
-        return redirect()->route('ventas.index')->with('success', 'Venta registrada con éxito');
-    }
+     return redirect()->route('ventas.index')->with('success', 'Venta registrada con éxito');
+ }
     
 
 

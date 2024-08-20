@@ -7,20 +7,19 @@ use Illuminate\Database\Eloquent\Model;
 class Detalle_venta extends Model
 {
     protected $table = 'detalle_venta';
-    protected $primaryKey = ['idVentas', 'idProducto'];
-    public $timestamps = false;     
+    public $incrementing = false;  // Desactivar la auto-incrementación
+    public $timestamps = false;    
 
     protected $fillable = [
-        'precio','cantidad'
+        'idVentas', 'idProducto', 'precio', 'cantidad'
     ];
 
-    
-
-    // Relación uno a uno con Membresia
+    // Relaciones con otros modelos
     public function Productos()
     {
         return $this->belongsTo(Producto::class, 'idProducto', 'idProducto');
     }
+
     public function Ventas()
     {
         return $this->belongsTo(Ventas::class, 'idVentas', 'idVentas');
