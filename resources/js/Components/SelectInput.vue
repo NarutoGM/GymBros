@@ -1,6 +1,5 @@
 <template>
-  <div class="relative text-gray-500 focus-within:text-white-600 dark:focus-within:text-purple-400">
-                  <select class="rounded block w-full pl-10 mt-1 text-sm text-black  dark:border-gray-600 dark:bg-white focus:border-purple-400 focus:outline-none 
+                  <select class="rounded block w-full pl-5 mt-1 text-sm text-black  dark:border-gray-600 dark:bg-white focus:border-purple-400 focus:outline-none 
                   focus:shadow-outline-purple dark:focus:shadow-outline-gray form-input" 
                   :class="{ 'opacity-50': readonly }"
                   :value="modelValue"  
@@ -19,7 +18,6 @@
 
                     </slot>
                   </div>
-                </div>
 </template>
 
 <script setup>
