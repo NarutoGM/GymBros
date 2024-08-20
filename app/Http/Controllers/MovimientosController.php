@@ -82,13 +82,13 @@ class MovimientosController extends Controller
         ->paginate(15);
 
         
-     //  return Inertia::render('Movimiento/Index', [
-      //     'movimientos' => $movimientos
-      //  ]);
+       return Inertia::render('Movimiento/Index', [
+           'movimientos' => $movimientos
+        ]);
 
-        return response()->json([
-            'movimientos' => $movimientos
-      ]);
+      //  return response()->json([
+     //       'movimientos' => $movimientos
+     //   ]);
     }
     
     public function store(Request $request)
