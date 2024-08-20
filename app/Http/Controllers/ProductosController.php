@@ -68,6 +68,7 @@ class ProductosController extends Controller
             $movimiento->cantidad = $request->stock;
             $movimiento->stock = $producto->stock;
             $movimiento->idProducto = $idProducto;
+            $movimiento->id = auth()->id(); // Asegúrate de que el campo en tu tabla se llama 'user_id' o similar
 
             $movimiento->save();
 

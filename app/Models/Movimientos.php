@@ -11,7 +11,7 @@ class Movimientos extends Model
     public $timestamps = false;     
 
     protected $fillable = [
-        'fecha','tipo','direccion','cantidad'
+        'fecha','tipo','direccion','cantidad','id'
     ];
 
     
