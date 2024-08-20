@@ -44,13 +44,15 @@ const classMsj = ref((props.flash.success != null) ? ' ' : 'hidden');
 const openModalForm = (op,b) =>{
 
 
-showModalForm.value = true;
 operation = op;
 if (op==1){
     title.value='CREAR UN NUEVO PRODUCTO';
-}else{
+    showModalForm.value = true;
 
-   
+}else{
+    if (op==2){
+    showModalForm.value = true;
+
     title.value='EDITAR INFORMACIÓN';
     form.idCategoria=b.idCategoria;
     form.categoria=b.categoria;
@@ -60,24 +62,25 @@ if (op==1){
     form.idProducto=b.idProducto;
     
 
-}
- 
-}
+    }else{
+      showModalForm2.value = true;
 
-const openModalForm2 = (b) =>{
-
-
-showModalForm2.value = true;
-
-    title.value='Añadir existencias ';
+    title.value='AÑADIR EXISTENCIAS ';
     form.idCategoria=b.idCategoria;
     form.producto=b.producto;
     form.precio=b.precio;
    // form.stock=b.stock;
     form.idProducto=b.idProducto;
     form.categoria=b.categoria.categoria;
+   
+    }
+
+
+}
  
 }
+
+
 
 const deletedProductos= (idProducto,producto) =>{
     const alerta=Swal.mixin({
@@ -126,7 +129,7 @@ const save = () => {
 
 const ok = (m) => {
     
-	if(operation == 2 || operation ==1){
+	if(operation == 2 || operation ==1 || operation ==3){
         closeModalForm();
 	 }
 	 form.reset();
@@ -235,7 +238,7 @@ const onPageClick = (event)=>{
                     </td>
 
                     <td class="px-1 py-3 text-sm text-center">
-                        <DarkButton @click="$event => openModalForm2(b)">
+                        <DarkButton @click="$event => openModalForm(b)">
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
                             </svg>
@@ -306,7 +309,7 @@ const onPageClick = (event)=>{
 		</Modal>
 
    
-        <Modal :show="showModalForm2" @close="closeModalForm">
+        <Modal :show="showModalForm2" @close="closeModalForm2">
 			<div class="p-6">
                  <h2 class="text-lg font-medium text-gray-900">{{ title }}</h2>
 				 <div class="m-6 mb-6 space-y-6 max-w-xl ">
