@@ -192,11 +192,11 @@ const onPageClick = (event)=>{
                     <td :class="{'bg-green-500': b.tipo === 'E', 'bg-red-500': b.tipo === 'S'}" class="px-1 py-3 text-sm text-center text-white">
                           {{ b.tipo === 'E' ? 'ENTRADA' : (b.tipo === 'S' ? 'SALIDA' : b.tipo) }}
                     </td>
-                    <td class="px-1 py-3 text-sm text-center">{{ b.productos.producto }}</td>
+                    <td class="px-1 py-3 text-sm text-center">{{ b.productos?.producto || 'N/A' }}</td>
 
                     <td class="px-1 py-3 text-sm text-center">{{ b.cantidad }}</td>
                     <td class="px-1 py-3 text-sm text-center">{{ b.stock }}</td>
-                    <td class="px-1 py-3 text-sm text-center">{{ b.user.name }}</td>
+                    <td class="px-1 py-3 text-sm text-center">{{ b.user?.name || 'N/A' }}</td>
 
                    
                  
