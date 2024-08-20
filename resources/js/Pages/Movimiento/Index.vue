@@ -6,7 +6,7 @@ import WarningButton from '@/Components/WarningButton.vue';
 import Modal from '@/Components/Modal.vue';
 import DarkButton from '@/Components/DarkButton.vue';
 import DeleteButton from '@/Components/DeleteButton.vue';
-import {readonly, ref} from 'vue';
+import {ref} from 'vue';
 import { Head , useForm} from '@inertiajs/vue3';
 import InputGroup from '@/Components/InputGroup.vue';
 import SelectInput from '@/Components/SelectInput.vue';
@@ -18,7 +18,7 @@ import NavLink from '@/Components/NavLink.vue';
 
 import Swal from 'sweetalert2';
 const props= defineProps({
-	producto:{type:Object},flash:{type:Object},categoria:{type:Object}
+	movimientos:{type:Object},flash:{type:Object}
 	
 });
 const form = useForm({producto:'',precio:'',stock:'',categoria:'',idCategoria:''});
@@ -27,8 +27,6 @@ const v = ref({	producto:'',idCategoria:'',precio:'',stock:''});
 
 
 const showModalForm = ref(false);
-const showModalForm2 = ref(false);
-
 let operation = ref(1);
 
 
@@ -46,38 +44,22 @@ const openModalForm = (op,b) =>{
 
 showModalForm.value = true;
 operation = op;
-if (op==1){
+if (op===1){
     title.value='Crear un nuevo producto';
 }else{
-
-   
     title.value='Editar un producto';
     form.idCategoria=b.idCategoria;
     form.categoria=b.categoria;
     form.producto=b.producto;
     form.precio=b.precio;
-   // form.stock=b.stock;
+    form.stock=b.stock;
     form.idProducto=b.idProducto;
-    
+
 
 }
  
 }
 
-const openModalForm2 = (b) =>{
-
-
-showModalForm2.value = true;
-
-    title.value='Añadir existencias ';
-    form.idCategoria=b.idCategoria;
-    form.producto=b.producto;
-    form.precio=b.precio;
-   // form.stock=b.stock;
-    form.idProducto=b.idProducto;
-    form.categoria=b.categoria.categoria;
- 
-}
 
 const deletedProductos= (idProducto,producto) =>{
     const alerta=Swal.mixin({
@@ -102,11 +84,6 @@ const deletedProductos= (idProducto,producto) =>{
 
 const closeModalForm = () =>{
 	showModalForm.value = false;
-	form.reset();
-
-}
-const closeModalForm2 = () =>{
-	showModalForm2.value = false;
 	form.reset();
 
 }
@@ -142,7 +119,6 @@ const formPage = useForm({});
 const onPageClick = (event)=>{
     formPage.get(route('productos.index',{page:event}));
 }
-
 </script>
 
 <template>
@@ -150,7 +126,7 @@ const onPageClick = (event)=>{
 	
 	<AuthenticatedLayout>
 		<template #header>
-			GESTION STOCK Y PRODUCTOS //
+			REPORTE DE ENTRADAS Y SALIDAS //
 		</template>
 
 		<DIV class="pb-2 flex justify-between items-center">
@@ -165,8 +141,8 @@ const onPageClick = (event)=>{
     
 		</DarkButton>
 		<vueTailwindPaginationUmd class="relative" 
-       :current="producto.currentPage" :total="producto.total" 
-       :per-page="producto.perPage"
+       :current="movimientos.currentPage" :total="movimientos.total" 
+       :per-page="movimientos.perPage"
        @page-changed="$event => onPageClick($event)"
        ></vueTailwindPaginationUmd>
 	   
@@ -197,51 +173,48 @@ const onPageClick = (event)=>{
         <table class="w-full whitespace-nowrap">
             <thead>
                 <tr class="text-sm font-semibold tracking-wide text-gray-100 uppercase border-b bg-blue-800">
+                    <th class="px-1 py-3 text-center">NRO MOVIMIENTO</th>
+
+                    <th class="px-1 py-3 text-center">FECHA</th>
+                    <th class="px-1 py-3 text-center">TIPO</th>
+
                     <th class="px-1 py-3 text-center">PRODUCTO</th>
-                    <th class="px-1 py-3 text-center">CATEGORIA</th>
-                    <th class="px-1 py-3 text-center">PRECIO S/.</th>
+                    <th class="px-1 py-3 text-center">CANTIDAD</th>
                     <th class="px-1 py-3 text-center">STOCK</th>
-                    <th class="px-1 py-3 text-center">EDITAR</th>
-                    <th class="px-1 py-3 text-center">BORRAR</th>
-                    <th class="px-1 py-3 text-center">AÑADIR STOCK</th>
+
+                    <th class="px-1 py-3 text-center">VER DETALLES</th>
 
                 </tr>
             </thead>
             <tbody class="text-gray-900 font-bold divide-y dark:divide-gray-700 dark:bg-blue-50">
-                <tr v-for="(b, i) in producto.data" :key="b.idProducto" class="text-gray-500">
-                    <td class="px-1 py-3 text-sm text-center">{{ b.producto }}</td>
-                    <td class="px-1 py-3 text-sm text-center">{{ b.categoria.categoria }}</td>
-                    <td class="px-1 py-3 text-sm text-center">{{ b.precio }}</td>
-
-                    <td class="px-1 py-3 text-sm text-center text-gray-700" :class="{  'bg-red-400': b.stock < 20,  'bg-green-400': b.stock >= 20  }"> {{ b.stock }}</td>
-                    
+                <tr v-for="(b, i) in movimientos.data" :key="b.idMovimientos" class="text-gray-500">
                     <td class="px-1 py-3 text-sm text-center">
-                        <WarningButton @click="openModalForm(2, b)" >
+                            {{ b.idMovimientos.toString().padStart(5, '0') }}
+                    </td> 
 
-                    
-    
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10"/>
-                            </svg>
-                        </WarningButton>
+
+                    <td class="px-1 py-3 text-sm text-center">{{ b.fecha }}</td>
+                    <td :class="{'bg-green-500': b.tipo === 'E', 'bg-red-500': b.tipo === 'S'}" class="px-1 py-3 text-sm text-center text-white">
+                          {{ b.tipo === 'E' ? 'ENTRADA' : (b.tipo === 'S' ? 'SALIDA' : b.tipo) }}
                     </td>
+                    <td class="px-1 py-3 text-sm text-center">{{ b.productos.producto }}</td>
+
+                    <td class="px-1 py-3 text-sm text-center">{{ b.cantidad }}</td>
+                    <td class="px-1 py-3 text-sm text-center">{{ b.stock }}</td>
 
                     <td class="px-1 py-3 text-sm text-center">
-                        <DeleteButton @click="$event => deletedProductos(b.idProducto,b.producto)">
+                        <SecondaryButton @click="openModalView(a)">
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0"/>
-                            </svg>
-                        </DeleteButton>
-                    </td>
-
-                    <td class="px-1 py-3 text-sm text-center">
-                        <DarkButton @click="$event => openModalForm2(b)">
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z" />
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
                             </svg>
 
-                        </DarkButton>
+                        </SecondaryButton>
                     </td>
+                 
+
+                
+
 
                     
                 </tr>
@@ -256,7 +229,7 @@ const onPageClick = (event)=>{
 
 
                     <span >NOMBRE DEL PRODUCTO: </span>
-                    <InputGroup :text="'NOMBRE DEL PRODUCTO'"  :require="'required'" v-model="form.producto" :type="'text'">
+                    <InputGroup :text="'NOMBRE DEL PRODUCTO'" :require="'required'" v-model="form.producto" :type="'text'">
 						
                     
                        -
@@ -281,9 +254,9 @@ const onPageClick = (event)=>{
                     <br>
 					<InputError class="mt-1" :message="form.errors.idCategoria"></InputError>
 
-                    <span >PRECIO: </span>
+                    <span>PRECIO: </span>
 
-                    <InputGroup  :text="'PRECIO'" :require="'required'" v-model="form.precio" :type="'text'">
+                    <InputGroup :text="'PRECIO'" :require="'required'" v-model="form.precio" :type="'text'">
 						
                         -
 
@@ -291,11 +264,19 @@ const onPageClick = (event)=>{
 
 					</InputGroup>
                     <br>
-					<InputError  class="mt-1" :message="form.errors.precio"></InputError>
+					<InputError class="mt-1" :message="form.errors.precio"></InputError>
+                    <span>STOCK: </span>
 
-                    
+                    <InputGroup :text="'STOCK'" :require="'required'" v-model="form.stock" :type="'text'">
+						
+                        -
 
-                         
+
+					</InputGroup>
+					
+					<InputError class="mt-1" :message="form.errors.stock"></InputError>
+
+					
 
 					
 
@@ -308,66 +289,7 @@ const onPageClick = (event)=>{
 		</Modal>
 
    
-        <Modal :show="showModalForm2" @close="closeModalForm">
-			<div class="p-6">
-                 <h2 class="text-lg font-medium text-gray-900">{{ title }}</h2>
-				 <div class="m-6 mb-6 space-y-6 max-w-xl ">
 
-
-                    <span >NOMBRE DEL PRODUCTO: </span>
-                    <InputGroup :text="'NOMBRE DEL PRODUCTO'" :readonly="readonly" :require="'required'" v-model="form.producto" :type="'text'">
-						
-                    
-                       -
-
-
-					</InputGroup>   
-
-					<br>
-					<InputError class="mt-1" :readonly="readonly" :message="form.errors.producto"></InputError>
-
-                    <span >CATEGORIA: </span>
-                    <InputGroup  :readonly="readonly" :text="'CATEGORIA'" :require="'required'" v-model="form.categoria" :type="'text'">
-                    
-					</InputGroup>
-
-                    
-                    <br>
-					<InputError class="mt-1"  :message="form.errors.categoria"></InputError>
-
-                    <span  :readonly="readonly">PRECIO: </span>
-
-                    <InputGroup  :readonly="readonly" :text="'PRECIO'" :require="'required'" v-model="form.precio" :type="'text'">
-						
-                        -
-
-
-
-					</InputGroup>
-                    <br>
-					<InputError class="mt-1" :message="form.errors.precio"></InputError>
-
-                    
-
-                    <span >STOCK: </span>
-
-                    <InputGroup  :text="'STOCK'" :require="'required'" v-model="form.stock" :type="'text'">
-                        -
-                    </InputGroup>
-
-                    <InputError class="mt-1" :message="form.errors.stock"></InputError>
-
-                                        
-
-					
-
-					<PrimaryButton @click="save">Guardar</PrimaryButton>
-				 </div>
-			</div>
-			<div class="m-6 flex justify-end">
-				<SecondaryButton @click="closeModalForm2">Cancel</SecondaryButton>
-			</div>
-		</Modal>
    
 		
 	</AuthenticatedLayout>

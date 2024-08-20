@@ -23,6 +23,11 @@ class Producto extends Model
         return $this->belongsTo(Categoria::class, 'idCategoria', 'idCategoria');
     }
 
+    // Relación uno a uno con Membresia
+    public function Movimientos()
+    {
+        return $this->belongsTo(Movimientos::class, 'idMovimientos', 'idMovimientos');
+    }
 
 }
 

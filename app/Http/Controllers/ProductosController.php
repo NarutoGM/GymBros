@@ -26,7 +26,7 @@ class ProductosController extends Controller
             'producto' => 'required|max:90',
             'idCategoria' => 'required|integer',  // Valida que 'duracion' sea un número entero
             'precio' => 'required|numeric',  // Valida que 'precio' sea un número decimal
-            'stock' => 'required|integer',  // Valida que 'precio' sea un número decimal
+    //        'stock' => 'required|integer',  // Valida que 'precio' sea un número decimal
 
             // Agrega más reglas de validación según sea necesario
         ]);
@@ -36,7 +36,7 @@ class ProductosController extends Controller
     
         $producto->producto = $request->producto;  // Assigning the value 
         $producto->precio = $request->precio;  // Assigning the value of NombreCurso
-        $producto->stock = $request->stock;  // Assigning the value of NombreCurso
+      //  $producto->stock = $request->stock;  // Assigning the value of NombreCurso
         $producto->save();
     
         // Redireccionar a la vista de índice de cursos
@@ -76,7 +76,7 @@ class ProductosController extends Controller
             'producto' => 'required|max:90',
             'idCategoria' => 'required|integer',  // Valida que 'duracion' sea un número entero
             'precio' => 'required|numeric',  // Valida que 'precio' sea un número decimal
-            'stock' => 'required|integer',  // Valida que 'precio' sea un número decimal
+     //       'stock' => 'required|integer',  // Valida que 'precio' sea un número decimal
 
             // Agrega más reglas de validación según sea necesario
         ]);
@@ -88,7 +88,7 @@ class ProductosController extends Controller
         $producto->precio = $request->precio;  // Assigning the value of NombreCurso
         $producto->idCategoria = $request->idCategoria;  // Assigning the value of NombreCurso
 
-        $producto->stock = $request->stock;  // Assigning the value of NombreCurso
+    //    $producto->stock = $request->stock;  // Assigning the value of NombreCurso
         $producto->save();
     
         // Redirigir a la página de índice de cursos u otra página

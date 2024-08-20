@@ -101,11 +101,11 @@
 
         <li class="relative px-6 py-3">
 
-<NavLink :href="route('ventas.index')" :active="route().current('ventas.index')">
+<NavLink :href="route('movimientos.index')" :active="route().current('movimientos.index')">
   <template #icon>
     <img src="/images/reporte-de-negocios.png" alt="" width="15%">
   </template>
-  REPORTES
+  MOVIMIENTOS
 </NavLink>
 </li> 
       </ul>

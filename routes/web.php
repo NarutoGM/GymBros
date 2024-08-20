@@ -6,6 +6,7 @@ use App\Http\Controllers\CategoriasController;
 use App\Http\Controllers\ProductosController;
 use App\Http\Controllers\VentasController;
 use App\Http\Controllers\MembresiaController;
+use App\Http\Controllers\MovimientosController;
 
 use App\Http\Controllers\MiembrosController;
 
@@ -13,8 +14,10 @@ use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
-use App\Models\Membresias;
-use App\Models\Miembros;
+use App\Http\Controllers\DashBoardController;
+use App\Models\Movimientos;
+use App\Models\Producto;
+use SebastianBergmann\CodeCoverage\Report\Html\Dashboard;
 
 /*
 |--------------------------------------------------------------------------
@@ -42,9 +45,10 @@ Route::get('/', function () {
 
 Route::get('/', [AuthenticatedSessionController::class, 'create'])->name('login');
 
-Route::get('/dashboard', function () {
-    return Inertia::render('Dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+Route::get('/dashboard/{month?}/{year?}', [DashBoardController::class, 'index'])
+    ->middleware(['auth', 'verified'])
+    ->name('dashboard');
+
 
 Route::middleware('auth')->group(function () {
     Route::get('/about', fn () => Inertia::render('About'))->name('about');
@@ -56,6 +60,7 @@ Route::middleware('auth')->group(function () {
     Route::resource('/membresias', MembresiaController::class);
 
     Route::resource('/miembros', MiembrosController::class);
+    Route::resource('/movimientos', MovimientosController::class);
 
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
