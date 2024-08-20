@@ -22,6 +22,9 @@ class Movimientos extends Model
         return $this->belongsTo(Producto::class, 'idProducto', 'idProducto');
     }
 
-
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'id', 'id'); // 'id' en 'Ventas' es la clave foránea que apunta al 'id' en 'users'
+    }
 }
 

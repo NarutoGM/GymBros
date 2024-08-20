@@ -52,5 +52,8 @@ class User extends Authenticatable
 {
     return $this->hasMany(Ventas::class);
 }
-
+public function movimientos()
+{
+    return $this->hasMany(Movimientos::class);
+}
 }

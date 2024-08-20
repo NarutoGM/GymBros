@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Categoria;
 use App\Models\Producto;
 use App\Models\Membresias;
+use App\Models\Movimientos;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
@@ -22,6 +23,9 @@ class ProductosController extends Controller
 
     public function update(Request $request, $idProducto)
     {
+        $numero = $request->input('numero');
+
+        if ($numero==1){
         $request->validate([
             'producto' => 'required|max:90',
             'idCategoria' => 'required|integer',  // Valida que 'duracion' sea un número entero
@@ -41,6 +45,37 @@ class ProductosController extends Controller
     
         // Redireccionar a la vista de índice de cursos
         return redirect()->route('productos.index');
+
+        }else{
+            $request->validate([
+                'producto' => 'required|max:90',
+                'idCategoria' => 'required|integer',  // Valida que 'duracion' sea un número entero
+                'precio' => 'required|numeric',  // Valida que 'precio' sea un número decimal
+        //        'stock' => 'required|integer',  // Valida que 'precio' sea un número decimal
+    
+                // Agrega más reglas de validación según sea necesario
+            ]);
+        
+            // Buscar el curso por su CodCurso
+            $producto = Producto::where('idProducto', $idProducto)->firstOrFail();
+        
+            $producto->stock = $producto->stock + $request->stock;  // Assigning the value of NombreCurso
+            $producto->save();
+        
+            $movimiento = new Movimientos();
+            $movimiento->fecha = now(); // Usa la fecha y hora actuales
+            $movimiento->tipo = 'E';
+            $movimiento->cantidad = $request->stock;
+            $movimiento->stock = $producto->stock;
+            $movimiento->idProducto = $idProducto;
+
+            $movimiento->save();
+
+            // Redireccionar a la vista de índice de cursos
+            return redirect()->route('productos.index');
+    
+        }
+
     }
     
 

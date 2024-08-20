@@ -77,8 +77,11 @@ class MovimientosController extends Controller
 
     public function index(Request $request)
     {   
-        $movimientos = Movimientos::with('productos:idProducto,producto')->paginate(15);
+        $movimientos = Movimientos::with('productos:idProducto,producto','user:id,name')
+        ->orderBy('fecha', 'desc') // Cambia 'desc' a 'asc' si necesitas un orden ascendente
+        ->paginate(15);
 
+        
        return Inertia::render('Movimiento/Index', [
            'movimientos' => $movimientos
         ]);
@@ -104,6 +107,7 @@ class MovimientosController extends Controller
         $membresia = new Membresias();
         $membresia->nombre = $request->nombre;  // Assigning the value 
         $membresia->duracion = $request->duracion;  // Assigning the value of NombreCurso
+        
         $membresia->precio = $request->precio;  // Assigning the value of NombreCurso
         $membresia->save();
     

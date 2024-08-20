@@ -21,7 +21,7 @@ const props= defineProps({
 	producto:{type:Object},flash:{type:Object},categoria:{type:Object}
 	
 });
-const form = useForm({producto:'',precio:'',stock:'',categoria:'',idCategoria:''});
+const form = useForm({producto:'',precio:'',stock:'',categoria:'',idCategoria:'',numero:''});
 
 const v = ref({	producto:'',idCategoria:'',precio:'',stock:''});
 
@@ -60,7 +60,7 @@ if (op==1){
     form.precio=b.precio;
    // form.stock=b.stock;
     form.idProducto=b.idProducto;
-    
+    form.numero=1;
 
     }else{
       showModalForm2.value = true;
@@ -72,7 +72,8 @@ if (op==1){
    // form.stock=b.stock;
     form.idProducto=b.idProducto;
     form.categoria=b.categoria.categoria;
-   
+    form.numero=2;
+
     }
 
 
@@ -120,17 +121,28 @@ const save = () => {
             onSuccess: () => { ok('Producto creado') }
         });
     } else {
-        form.put(route('productos.update', form.idProducto), {
-            onSuccess: () => { ok('Producto editado') }
-        });
+        if (operation == 2) {
+            form.put(route('productos.update',form.idProducto), {
+                onSuccess: () => { ok('Producto editado') }
+            });
+        }else{
+            form.put(route('productos.update', form.idProducto), {
+                onSuccess: () => { ok('Producto editado') }
+            });
+        }
+        
     }
 };
 
 
 const ok = (m) => {
     
-	if(operation == 2 || operation ==1 || operation ==3){
+	if(operation == 2 || operation ==1 ){
         closeModalForm();
+	 }
+
+     if(operation ==3){
+        closeModalForm2();
 	 }
 	 form.reset();
 	 msj.value = m;
