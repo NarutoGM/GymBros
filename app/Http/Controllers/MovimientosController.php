@@ -107,8 +107,10 @@ class MovimientosController extends Controller
         $membresia = new Membresias();
         $membresia->nombre = $request->nombre;  // Assigning the value 
         $membresia->duracion = $request->duracion;  // Assigning the value of NombreCurso
-        
+
         $membresia->precio = $request->precio;  // Assigning the value of NombreCurso
+        $membresia->id = auth()->id(); // Asegúrate de que el campo en tu tabla se llama 'user_id' o similar
+
         $membresia->save();
     
         // Redirigir a la página de índice de cursos u otra página
