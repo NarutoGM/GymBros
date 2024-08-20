@@ -80,6 +80,7 @@ function removeProduct(index) {
 // Enviar formulario
 const submitForm = () => {
     form.montobruto = calculateTotalVenta();
+
     form.igv = form.montobruto * 0.18;
     form.montoneto = form.montobruto + form.igv;
     form.productos = selectedProducts.value;
@@ -116,108 +117,108 @@ form.fecha = new Date().toISOString().slice(0, 10);
         </template>
 
         <div class="min-w-0 px-4">
-            <form @submit.prevent="submitForm" class="mt-6 space-y-3 max-w-full">
-                <div class="grid gap-6 mb-8 p-4 md:grid-cols-1 lg:grid-cols-5">
-                    <!-- Columna 1: Selección de Productos e Información del Cliente -->
-                    <div class="lg:col-span-2 space-y-4 border rounded-lg shadow-xs p-5">
-                        <div class="flex space-x-4">
-                            <div class="flex-1">
-                                <label for="tipofacturacion" class="block text-sm font-medium text-gray-700">TIPO DE DOCUMENTO</label>
-                                <select v-model="form.tipofacturacion" id="tipofacturacion" name="tipofacturacion" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
-                                    <option value="">Seleccionar...</option>
-                                    <option value="FACTURA">FACTURA</option>
-                                    <option value="BOLETA">BOLETA</option>
-                                </select>
-                            </div>
-                            <div class="flex-1">
-                                <label for="cliente" class="block text-sm font-medium text-gray-700">Nombre del Cliente</label>
-                                <input v-model="form.cliente" type="text" id="cliente" name="cliente" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" />
-                            </div>
-                        </div>
+          <form @submit.prevent="submitForm" class="mt-6 space-y-3 max-w-full">
+    <div class="grid gap-6 mb-8 p-4 md:grid-cols-1 lg:grid-cols-5">
+      <!-- Columna 1: Selección de Productos e Información del Cliente -->
+      <div class="lg:col-span-2 space-y-4 border rounded-lg shadow-xs p-5">
+        <div class="flex space-x-4">
+          <div class="flex-1">
+            <label for="tipofacturacion" class="block text-sm font-medium text-gray-700">TIPO DE DOCUMENTO</label>
+            <select v-model="form.tipofacturacion" id="tipofacturacion" name="tipofacturacion" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+              <option value="">Seleccionar...</option>
+              <option value="FACTURA">FACTURA</option>
+              <option value="BOLETA">BOLETA</option>
+            </select>
+          </div>
+          <div class="flex-1">
+            <label for="cliente" class="block text-sm font-medium text-gray-700">Nombre del Cliente</label>
+            <input v-model="form.cliente" type="text" id="cliente" name="cliente" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" />
+          </div>
+        </div>
 
-                        <div class="flex space-x-4">
-                            <div class="flex-1">
-                                <label for="vendedor" class="block text-sm font-medium text-gray-800">Vendedor</label>
-                                <input type="text" id="vendedor" name="vendedor" :value="$page.props.auth.user.name" readonly class="mt-1 block w-full border-gray-300 rounded-md shadow-md bg-gray-200 text-gray-800 sm:text-sm p-2" />
-                            </div>
-                            <div class="flex-1">
-                                <label for="fecha" class="block text-sm font-medium text-gray-700">Fecha</label>
-                                <input readonly v-model="form.fecha" type="text" id="fecha" name="fecha" class="mt-1 block w-full border-gray-300 rounded-md shadow-md bg-gray-200 text-gray-800 sm:text-sm p-2" />
-                            </div>
-                        </div>
+        <div class="flex space-x-4">
+          <div class="flex-1">
+            <label for="vendedor" class="block text-sm font-medium text-gray-800">Vendedor</label>
+            <input type="text" id="vendedor" name="vendedor" :value="$page.props.auth.user.name" readonly class="mt-1 block w-full border-gray-300 rounded-md shadow-md bg-gray-200 text-gray-800 sm:text-sm p-2" />
+          </div>
+          <div class="flex-1">
+            <label for="fecha" class="block text-sm font-medium text-gray-700">Fecha</label>
+            <input readonly v-model="form.fecha" type="text" id="fecha" name="fecha" class="mt-1 block w-full border-gray-300 rounded-md shadow-md bg-gray-200 text-gray-800 sm:text-sm p-2" />
+          </div>
+        </div>
 
-                        <div class="flex space-x-4">
-                            <div class="flex-1">
-                                <label for="productos" class="block text-sm font-medium text-gray-700">PRODUCTO</label>
-                                <select v-model="selectedProduct" id="producto" name="producto" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
-                                    <option value="">Seleccionar...</option>
-                                    <option v-for="producto in productos" :key="producto.idProducto" :value="producto">
-                                        {{ producto.producto }}
-                                    </option>
-                                </select>
-                            </div>
-                            <div class="flex-1">
-                                <label for="cantidad" class="block text-sm font-medium text-gray-700">Cantidad</label>
-                                <input v-model="cantidad" type="number" id="cantidad" name="cantidad" value="1" min="1" step="1" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" />
-                            </div>
-                        </div>
+        <div class="flex space-x-4">
+          <div class="flex-1">
+            <label for="productos" class="block text-sm font-medium text-gray-700">PRODUCTO</label>
+            <select v-model="selectedProduct" id="producto" name="producto" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+              <option value="">Seleccionar...</option>
+              <option v-for="producto in productos" :key="producto.idProducto" :value="producto">
+                {{ producto.producto }}
+              </option>
+            </select>
+          </div>
+          <div class="flex-1">
+            <label for="cantidad" class="block text-sm font-medium text-gray-700">Cantidad</label>
+            <input v-model="cantidad" type="number" id="cantidad" name="cantidad" value="1" min="1" step="1" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" />
+          </div>
+        </div>
 
-                        <div class="flex justify-end mt-4">
-                            <SecondaryButton @click="addProduct" type="button">Añadir producto</SecondaryButton>
-                        </div>
-                    </div>
+        <div class="flex justify-end mt-4">
+          <SecondaryButton @click="addProduct" type="button">Añadir producto</SecondaryButton>
+        </div>
+      </div>
 
-                    <!-- Columna 2: Tabla de Productos Seleccionados -->
-                    <div class="lg:col-span-3 space-y-0">
-                        <div class="border shadow-xs rounded-t-lg p-4">
-                            <h3 class="text-lg font-medium text-gray-900">Productos Seleccionados</h3>
-                            <div class="overflow-x-auto relative rounded-t-lg shadow-xs mt-4">
-                                <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400 shadow-sm sm:rounded-lg">
-                                    <thead class="text-xs text-gray-700 uppercase bg-gray-100 dark:bg-blue-700 dark:text-gray-100">
-                                        <tr>
-                                            <th scope="col" class="px-6 py-3">Producto</th>
-                                            <th scope="col" class="px-6 py-3">Cantidad</th>
-                                            <th scope="col" class="px-6 py-3">Precio</th>
-                                            <th scope="col" class="px-6 py-3">Subtotal</th>
-                                            <th scope="col" class="px-6 py-3"></th>
-                                        </tr>
-                                    </thead>
-                                    <tbody class="border">
-                                        <tr v-for="(product, index) in selectedProducts" :key="product.id" class="bg-white border-b dark:bg-gray-50 dark:border-gray-700">
-                                            <td class="px-6 py-4  text-gray-800 font-medium ">{{ product.nombre }}</td>
-                                            <td class="px-6 py-4  text-gray-800">{{ product.cantidad }}</td>
-                                            <td class="px-6 py-4  text-gray-800">{{ product.precio.toFixed(2) }}</td>
-                                            <td class="px-6 py-4  text-gray-800">{{ product.subtotal.toFixed(2) }}</td>
-                                            <td class="px-6 py-4  text-gray-800">
-                                                <button @click="removeProduct(index)" type="button" class="text-red-600 hover:text-red-900 dark:text-red-400 dark:hover:text-red-600">Quitar</button>
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
+      <!-- Columna 2: Tabla de Productos Seleccionados -->
+      <div class="lg:col-span-3 space-y-0">
+        <div class="border shadow-xs rounded-t-lg p-4">
+          <h3 class="text-lg font-medium text-gray-900">Productos Seleccionados</h3>
+          <div class="overflow-x-auto relative rounded-t-lg shadow-xs mt-4">
+            <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400 shadow-sm sm:rounded-lg">
+              <thead class="text-xs text-gray-700 uppercase bg-gray-100 dark:bg-blue-700 dark:text-gray-100">
+                <tr>
+                  <th scope="col" class="px-6 py-3">Producto</th>
+                  <th scope="col" class="px-6 py-3">Cantidad</th>
+                  <th scope="col" class="px-6 py-3">Precio</th>
+                  <th scope="col" class="px-6 py-3">Subtotal</th>
+                  <th scope="col" class="px-6 py-3"></th>
+                </tr>
+              </thead>
+              <tbody class="border">
+                <tr v-for="(product, index) in selectedProducts" :key="product.id" class="bg-white border-b dark:bg-gray-50 dark:border-gray-700">
+                  <td class="px-6 py-4 text-gray-800 font-medium">{{ product.nombre }}</td>
+                  <td class="px-6 py-4 text-gray-800">{{ product.cantidad }}</td>
+                  <td class="px-6 py-4 text-gray-800">{{ product.precio.toFixed(2) }}</td>
+                  <td class="px-6 py-4 text-gray-800">{{ product.subtotal.toFixed(2) }}</td>
+                  <td class="px-6 py-4 text-gray-800">
+                    <button @click="removeProduct(index)" type="button" class="text-red-600 hover:text-red-900 dark:text-red-400 dark:hover:text-red-600">Quitar</button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
 
-                        <div class="p-4">
-                            <div class="flex justify-between">
-                                <div>
-                                    <p class="text-gray-600">Monto Bruto:</p>
-                                    <p class="text-gray-600">IGV (18%):</p>
-                                    <p class="text-gray-900 font-semibold">Monto Neto:</p>
-                                </div>
-                                <div class="text-right">
-                                    <p class="text-gray-600">{{ form.montobruto.toFixed(2) }}</p>
-                                    <p class="text-gray-600">{{ form.igv.toFixed(2) }}</p>
-                                    <p class="text-gray-900 font-semibold">{{ form.montoneto.toFixed(2) }}</p>
-                                </div>
-                            </div>
-                        </div>
+        <div class="p-4">
+          <div class="flex justify-between">
+            <div>
+              <p class="text-gray-600">Monto Bruto:</p>
+              <p class="text-gray-600">IGV (18%):</p>
+              <p class="text-gray-900 font-semibold">Monto Neto:</p>
+            </div>
+            <div class="text-right">
+              <p class="text-gray-600">{{ form.montobruto.toFixed(2) }}</p>
+              <p class="text-gray-600">{{ form.igv.toFixed(2) }}</p>
+              <p class="text-gray-900 font-semibold">{{ form.montoneto.toFixed(2) }}</p>
+            </div>
+          </div>
+        </div>
 
-                        <div class="flex justify-end">
-                            <PrimaryButton type="submit">Registrar Venta</PrimaryButton>
-                        </div>
-                    </div>
-                </div>
-            </form>
+        <div class="flex justify-end">
+          <PrimaryButton type="submit">Registrar Venta</PrimaryButton>
+        </div>
+      </div>
+    </div>
+  </form>
         </div>
     </AuthenticatedLayout>
 </template>

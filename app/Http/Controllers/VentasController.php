@@ -76,43 +76,51 @@ class VentasController extends Controller
     
     public function store(Request $request)
     {
-        $validated = $request->validate([
+        // Validación (opcional)
+        $request->validate([
             'tipofacturacion' => 'required|string',
-            'cliente' => 'required|string',
             'montobruto' => 'required|numeric',
-            'igv' => 'required|integer',
+            'igv' => 'required|numeric',
             'montoneto' => 'required|numeric',
+            'cliente' => 'required|string',
             'productos' => 'required|array',
             'productos.*.idProducto' => 'required|integer',
-            'productos.*.cantidad' => 'required|integer',
             'productos.*.precio' => 'required|numeric',
+            'productos.*.cantidad' => 'required|integer',
         ]);
     
         // Crear la venta
-        $venta = Ventas::create([
-            'tipofacturacion' => $validated['tipofacturacion'],
-            'fecha' => now(),
-            'montobruto' => $validated['montobruto'],
-            'igv' => $validated['igv'],
-            'montoneto' => $validated['montoneto'],
-            'id' => auth()->id(),  // El ID del usuario autenticado
-            'cliente' => $validated['cliente'],
-        ]);
+        $venta = new Ventas();
+        $venta->tipofacturacion = $request->tipofacturacion;  // Asignar el valor 
+        $venta->id = auth()->id();  // Asignar el valor 
+        $venta->fecha = now();  // Usar el helper 'now()' para obtener la fecha y hora actual
+        $venta->montobruto = $request->montobruto;  // Asignar el valor 
+        $venta->igv = $request->igv;  // Asignar el valor 
+        $venta->montoneto = $request->montoneto;  // Asignar el valor 
+        $venta->cliente = $request->cliente;  // Asignar el valor 
+    
+        // Guardar la venta para obtener el idVentas
+        $venta->save();
     
         // Crear los detalles de la venta
-        foreach ($validated['productos'] as $producto) {
-            Detalle_venta::create([
-                'idVentas' => $venta->idVentas,
-                'idProducto' => $producto['idProducto'],
-                'precio' => $producto['precio'],
-                'cantidad' => $producto['cantidad'],
-            ]);
+        foreach ($request->productos as $producto) {
+            if (is_array($producto) && isset($producto['idProducto'], $producto['precio'], $producto['cantidad'])) {
+                $detalleventa = new Detalle_venta();
+                $detalleventa->idVentas = $venta->idVentas;  // Asignar el valor 
+                $detalleventa->idProducto = $producto['idProducto'];  // Asignar el valor 
+                $detalleventa->precio = $producto['precio'];  // Asignar el valor 
+                $detalleventa->cantidad = $producto['cantidad'];  // Asignar el valor 
+                $detalleventa->save();
+            } else {
+                // Manejo de errores si $producto no es válido
+                return redirect()->back()->withErrors('Error en los productos enviados.');
+            }
         }
-    
+        
         return redirect()->route('ventas.index')->with('success', 'Venta registrada con éxito');
     }
     
-    
+
 
     
     public function destroy( $idMembresia)
