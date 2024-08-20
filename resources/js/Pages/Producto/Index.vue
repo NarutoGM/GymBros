@@ -238,7 +238,7 @@ const onPageClick = (event)=>{
                     </td>
 
                     <td class="px-1 py-3 text-sm text-center">
-                        <DarkButton @click="$event => openModalForm(b)">
+                        <DarkButton @click="$event => openModalForm(3,b)">
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
                             </svg>
@@ -284,7 +284,7 @@ const onPageClick = (event)=>{
 
                     <span >PRECIO: </span>
 
-                    <InputGroup  :text="'PRECIO'" :require="'required'" v-model="form.precio" :type="'text'">
+                    <InputGroup  :text="'PRECIO'" :require="'required'" v-model="form.precio" :type="'number'" step="0.01">
 						
                         -
 
@@ -338,7 +338,7 @@ const onPageClick = (event)=>{
 
                     <span  :readonly="readonly">PRECIO: </span>
 
-                    <InputGroup  :readonly="readonly" :text="'PRECIO'" :require="'required'" v-model="form.precio" :type="'text'">
+                    <InputGroup  :readonly="readonly" :text="'PRECIO'" :require="'required'" v-model="form.precio" :type="'number'" step="0.01">
 						
                         -
 
@@ -352,8 +352,8 @@ const onPageClick = (event)=>{
 
                     <span >STOCK: </span>
 
-                    <InputGroup  :text="''" :require="'required'" v-model="form.stock" :type="'text'">
-                        -
+                    <InputGroup  :text="''" :require="'required'" v-model="form.stock" :type="'number'">
+                        
                     </InputGroup>
 
                     <InputError class="mt-1" :message="form.errors.stock"></InputError>
