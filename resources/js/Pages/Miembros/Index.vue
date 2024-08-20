@@ -14,7 +14,7 @@ import vueTailwindPaginationUmd from '@ocrv/vue-tailwind-pagination';
 import Pagination from '@/Components/Pagination.vue';
 import NavLink from '@/Components/NavLink.vue';
 
-import Swal from 'sweetalert2';
+import Swal from 'sweetalert2'; 
 const props= defineProps({
 	miembros:{type:Object},flash:{type:Object}
 	
@@ -34,14 +34,37 @@ const showModalDel = ref(false);
 
 const title = ref('');
 
+const showModalForm = ref(false);
+const showModalForm2 = ref(false);
 
+const openModalForm = (op) =>{
+
+if (op==1){
+    title.value='CREAR UN NUEVO PRODUCTO';
+    showModalForm.value = true;
+
+}else{  
+    if (op==2){
+    showModalForm.value = true;
+
+    title.value='EDITAR INFORMACIÓN';
+ 
+
+    }else{
+      showModalForm2.value = true;
+
+    title.value='AÑADIR EXISTENCIAS ';
+
+    }
+
+
+}
+ 
+}
 
 
 const msj = ref((props.flash.success != null) ? props.flash.success: '');
 const classMsj = ref((props.flash.success != null) ? ' ' : 'hidden');
-
-
-
 
 const openModalDel = (b) =>{
     form.dni = b.dni;
@@ -290,12 +313,12 @@ export default {
                         </DeleteButton>
                     </td>
                     <td class="px-1 py-3 text-sm text-center">
-                        <SecondaryButton @click="$event => deletedMiembros(b.dni, b.nombre)">
+                        <DarkButton @click="$event => openModalForm(1)">
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
-                             <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5ZM12 12.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5ZM12 18.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5Z" />
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
                             </svg>
 
-                        </SecondaryButton>
+                        </DarkButton>
                     </td>
 
                 </tr>
@@ -322,6 +345,19 @@ export default {
                 <SecondaryButton @click="closeModalDel">Cancel</SecondaryButton>
             </div>
         </Modal>
+
+        <Modal :show="showModalForm" @close="closeModalForm">
+			<div class="p-6">
+                 <h2 class="text-lg font-medium text-gray-900"> Hola </h2>
+				 <div class="m-6 mb-6 space-y-6 max-w-xl ">
+
+					<PrimaryButton @click="save">Guardar</PrimaryButton>
+				 </div>
+			</div>
+			<div class="m-6 flex justify-end">
+				<SecondaryButton @click="closeModalForm">Cancel</SecondaryButton>
+			</div>
+		</Modal>
 		
 	</AuthenticatedLayout>
 </template>

@@ -2,7 +2,7 @@
   <aside class="z-20 hidden w-64 overflow-y-auto bg-blue-800 md:block flex-shrink-0">
     <div class="py-4 text-gray-100">
       <Link class="ml-6 text-lg font-bold text-gray-100" :href="route('dashboard')">
-      GymBros
+      Gym Bros
       </Link>
 
       <ul class="mt-6">

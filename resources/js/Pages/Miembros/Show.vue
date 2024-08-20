@@ -7,6 +7,7 @@ import DarkButton from '@/Components/DarkButton.vue';
 const props = defineProps({miembros:{type:Object}, });
 
 
+
 </script>
 <script>
 export default {
