@@ -199,9 +199,6 @@ const onPageClick = (event)=>{
                     <td class="px-1 py-3 text-sm text-center">{{ b.user?.name || 'N/A' }}</td>
 
                    
-                 
-
-                
 
 
                     

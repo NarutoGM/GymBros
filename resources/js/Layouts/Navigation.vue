@@ -46,12 +46,13 @@
             class="p-2 mt-2 space-y-2 overflow-hidden text-sm font-medium text-gray-500 rounded-md shadow-inner bg-gray-50"
             aria-label="submenu">
             <li class="px-2 py-1 transition-colors duration-150 hover:text-gray-800">
-              <a class="w-full" :href="route('productos.index')" :active="route().current('productos.index')">
-                <div class="flex" ></div> INVENTARIOS
-              </a>
+                <a class="w-full" :href="route('productos.index')" :active="route().current('productos.index')"
+                  @click="saveTimeInLocalStorage">
+                    <div class="flex"></div> INVENTARIOS
+                </a>
             </li>
             <li class="px-2 py-1 transition-colors duration-150 hover:text-gray-800">
-              <a class="w-full"  :href="route('categorias.index')" :active="route().current('categorias.index')">CATEGORIAS</a>
+                <a class="w-full" :href="route('categorias.index')" :active="route().current('categorias.index')">CATEGORIAS</a>
             </li>
           </ul>
         </li>
@@ -123,7 +124,11 @@ export default {
     NavLink,
     Link,
   },
-
+  methods: {
+    saveTimeInLocalStorage() {
+      localStorage.setItem('startTime', Date.now());
+    }
+  },
   setup() {
     let showingTwoLevelMenu = ref(false)
 

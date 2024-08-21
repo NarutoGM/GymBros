@@ -133,8 +133,6 @@ class VentasController extends Controller
     
                 $movimiento->save();
             }
-
-
         
      return redirect()->route('ventas.index')->with('success', 'Venta registrada con éxito');
  }

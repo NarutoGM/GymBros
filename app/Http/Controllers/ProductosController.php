@@ -37,7 +37,8 @@ class ProductosController extends Controller
     
         // Buscar el curso por su CodCurso
         $producto = Producto::where('idProducto', $idProducto)->firstOrFail();
-    
+        $producto->idCategoria = $request->idCategoria;  // Assigning the value 
+
         $producto->producto = $request->producto;  // Assigning the value 
         $producto->precio = $request->precio;  // Assigning the value of NombreCurso
       //  $producto->stock = $request->stock;  // Assigning the value of NombreCurso
@@ -61,7 +62,10 @@ class ProductosController extends Controller
         
             $producto->stock = $producto->stock + $request->stock;  // Assigning the value of NombreCurso
             $producto->save();
-        
+
+
+
+
             $movimiento = new Movimientos();
             $movimiento->fecha = now(); // Usa la fecha y hora actuales
             $movimiento->tipo = 'E';
@@ -73,10 +77,17 @@ class ProductosController extends Controller
             $movimiento->save();
 
             // Redireccionar a la vista de índice de cursos
-            return redirect()->route('productos.index');
-    
-        }
 
+
+ // Calcular el tiempo transcurrido
+ //$endTime = now()->timestamp * 1000; // Convertir a milisegundos
+ //$timeTaken = $endTime - $request->tiempoini; // Diferencia en milisegundos
+
+ // Convertir a segundos (si es necesario)
+ //$timeDifference = round($timeTaken / 1000, 2);
+
+            return redirect()->route('productos.index');
+        }
     }
     
 

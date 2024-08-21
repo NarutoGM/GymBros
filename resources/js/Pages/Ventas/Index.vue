@@ -225,17 +225,17 @@ export default {
     <div class="w-full overflow-x-auto bg-white">
         <table class="w-full whitespace-nowrap">
             <thead>
-                <tr class="text-sm font-semibold tracking-wide text-gray-100 uppercase border-b bg-blue-800">
+                <tr class="text-sm font-semibold tracking-wide text-gray-100 uppercase border-b bg-blue-600">
+                    <th class="px-1 py-3 text-center">NUMERO</th>
 
                     <th class="px-1 py-3 text-center">FECHA</th>
                     <th class="px-1 py-3 text-center">HORAS</th>
+                    <th class="px-1 py-3 text-center">DOCUMENTO</th>
 
                     <th class="px-1 py-3 text-center">CLIENTE</th>
 
                     <th class="px-1 py-3 text-center">VENDEDOR</th>
-                    <th class="px-1 py-3 text-center">DOCUMENTO</th>
 
-                    <th class="px-1 py-3 text-center">NUMERO</th>
                     <th class="px-1 py-3 text-center">TOTAL VENTA</th>
                     <th class="px-1 py-3 text-center">IMPRIMIR</th>
 
@@ -243,20 +243,23 @@ export default {
 
                 </tr>
             </thead>
-            <tbody class="text-gray-900 font-bold divide-y dark:divide-gray-700 dark:bg-blue-50">
+            <tbody class="text-gray-900 font-bold divide-y dark:divide-gray-700">
                 <tr v-for="(b, i) in ventas.data" :key="b.idVentas" class="text-gray-500">
+                    <td class="px-1 py-3 text-sm text-center">
+    {{ new Date(b.fecha).getFullYear() + '-' + b.idVentas.toString().padStart(7, '0') }}
+</td>
                     <td class="px-1 py-3 text-sm text-center">{{ new Date(b.fecha).toLocaleDateString() }}</td>
-<td class="px-1 py-3 text-sm text-center">{{ new Date(b.fecha).toLocaleTimeString() }}</td>
 
+                    <td class="px-1 py-3 text-sm text-center">{{ new Date(b.fecha).toLocaleTimeString() }}</td>
+                    <td class="px-1 py-3 text-sm text-center">{{ b.tipofacturacion }}</td>
 
                     <td class="px-1 py-3 text-sm text-center">{{ b.cliente }}</td>
 
            
                     <td class="px-1 py-3 text-sm text-center">{{ b.user.name  }}</td>
-                    <td class="px-1 py-3 text-sm text-center">{{ b.tipofacturacion }}</td>
-                    <td class="px-1 py-3 text-sm text-center">
-    {{ new Date(b.fecha).getFullYear() + '-' + b.idVentas.toString().padStart(7, '0') }}
-</td>
+
+
+
                     <td class="px-1 py-3 text-sm text-center">{{ b.montoneto }}</td>
 
                 
@@ -266,13 +269,13 @@ export default {
                          
                    
                     <td class="px-1 py-3 text-sm text-center">
-                        <SecondaryButton @click="$event => deletedMiembros(b.dni, b.nombre)">
+                        <WarningButton @click="$event => deletedMiembros(b.dni, b.nombre)">
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
-  <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5M16.5 12 12 16.5m0 0L7.5 12m4.5 4.5V3" />
+  <path stroke-linecap="round" stroke-linejoin="round" d="M7.5 7.5h-.75A2.25 2.25 0 0 0 4.5 9.75v7.5a2.25 2.25 0 0 0 2.25 2.25h7.5a2.25 2.25 0 0 0 2.25-2.25v-7.5a2.25 2.25 0 0 0-2.25-2.25h-.75m-6 3.75 3 3m0 0 3-3m-3 3V1.5m6 9h.75a2.25 2.25 0 0 1 2.25 2.25v7.5a2.25 2.25 0 0 1-2.25 2.25h-7.5a2.25 2.25 0 0 1-2.25-2.25v-.75" />
 </svg>
 
 
-                        </SecondaryButton>
+                        </WarningButton>
                     </td>
 
                 </tr>
