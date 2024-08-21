@@ -75,22 +75,35 @@ class MovimientosController extends Controller
 
 
 
-    public function index(Request $request)
-    {   
-        $movimientos = Movimientos::with('productos:idProducto,producto','user:id,name')
-        ->orderBy('fecha', 'desc') // Cambia 'desc' a 'asc' si necesitas un orden ascendente
-        ->paginate(15);
-
+public function index(Request $request)
+    {
+        $query = Movimientos::with('productos:idProducto,producto', 'user:id,name')
+                             ->orderBy('fecha', 'desc'); // Cambia 'desc' a 'asc' si necesitas un orden ascendente
         
-       return Inertia::render('Movimiento/Index', [
-           'movimientos' => $movimientos
-        ]);
+        $year = $request->query('year');
+        $month = $request->query('month');
 
+        // Filtrar por año y mes si ambos parámetros están presentes
+        if (!empty($year) && !empty($month)) {
+            $query->whereYear('fecha', $year)
+                  ->whereMonth('fecha', $month);
+        } elseif (!empty($year)) { // Filtrar solo por año si el mes no está presente
+            $query->whereYear('fecha', $year);
+        } elseif (!empty($month)) { // Filtrar solo por mes si el año no está presente
+            $query->whereMonth('fecha', $month);
+        }
+
+        // Obtener los movimientos con paginación
+        $movimientos = $query->paginate(15);
+
+        // Pasar los datos a la vista
+        return Inertia::render('Movimiento/Index', [
+            'movimientos' => $movimientos
+        ]);
+    }
       //  return response()->json([
      //       'movimientos' => $movimientos
-     //   ]);
-    }
-    
+     //   ]);    
     public function store(Request $request)
     {
         // Validar los datos del formulario

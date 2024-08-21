@@ -10,6 +10,7 @@ import {ref} from 'vue';
 import { Head , useForm} from '@inertiajs/vue3';
 import InputGroup from '@/Components/InputGroup.vue';
 import SelectInput from '@/Components/SelectInput.vue';
+import { useRouter } from 'vue-router';
 
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import vueTailwindPaginationUmd from '@ocrv/vue-tailwind-pagination';
@@ -119,6 +120,52 @@ const formPage = useForm({});
 const onPageClick = (event)=>{
     formPage.get(route('productos.index',{page:event}));
 }
+
+const currentYear = new Date().getFullYear();
+const years = Array.from({ length: 10 }, (v, i) => currentYear - i);
+const months = [
+  { name: 'Enero', value: 1 },
+  { name: 'Febrero', value: 2 },
+  { name: 'Marzo', value: 3 },
+  { name: 'Abril', value: 4 },
+  { name: 'Mayo', value: 5 },
+  { name: 'Junio', value: 6 },
+  { name: 'Julio', value: 7 },
+  { name: 'Agosto', value: 8 },
+  { name: 'Septiembre', value: 9 },
+  { name: 'Octubre', value: 10 },
+  { name: 'Noviembre', value: 11 },
+  { name: 'Diciembre', value: 12 },
+];
+
+// Definir el estado de los valores seleccionados
+const selectedYear = ref(currentYear);
+const selectedMonth = ref(new Date().getMonth() + 1);
+
+// Utilizar useForm para gestionar la solicitud
+const form2 = useForm({
+  year: selectedYear.value,
+  month: selectedMonth.value
+});
+
+// Función para actualizar el dashboard
+function updateDashboard() {
+  // Actualizar los valores del formulario antes de enviar la solicitud
+  form2.year = selectedYear.value;
+  form2.month = selectedMonth.value;
+
+  // Realizar la solicitud GET
+  form2.get(route('movimientos.index'), {
+    onSuccess: (response) => {
+      console.log('Datos recibidos:', response.data);
+      // Manejar los datos de respuesta, actualizando el estado del componente o realizando otras acciones
+    },
+    onError: (error) => {
+      console.error('Error al actualizar el dashboard:', error);
+    }
+  });
+}
+
 </script>
 
 <template>
@@ -129,17 +176,33 @@ const onPageClick = (event)=>{
 			REPORTE DE ENTRADAS Y SALIDAS //
 		</template>
 
-		<DIV class="pb-2 flex justify-between items-center">
+        <div class="pb-2 flex justify-between items-center">
+    <div class="flex space-x-4 mt-4">
+      <div>
+        <label for="year" class="block text-sm font-medium text-gray-700">Año</label>
+        <select v-model="selectedYear" id="year" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+          <option v-for="year in years" :key="year" :value="year">{{ year }}</option>
+        </select>
+      </div>
 
-			
-		<vueTailwindPaginationUmd class="relative" 
-       :current="movimientos.currentPage" :total="movimientos.total" 
-       :per-page="movimientos.perPage"
-       @page-changed="$event => onPageClick($event)"
-       ></vueTailwindPaginationUmd>
-	   
+      <div>
+        <label for="month" class="block text-sm font-medium text-gray-700">Mes</label>
+        <select v-model="selectedMonth" id="month" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+          <option v-for="month in months" :key="month.value" :value="month.value">{{ month.name }}</option>
+        </select>
+      </div>
 
-		</DIV>
+      <button @click="updateDashboard" class="ml-4 px-4 py-2 bg-blue-500 text-white rounded-md">Actualizar</button>
+    </div>
+
+    <vue-tailwind-pagination-umd 
+      class="relative" 
+      :current="movimientos.currentPage" 
+      :total="movimientos.total" 
+      :per-page="movimientos.perPage"
+      @page-changed="onPageClick"
+    ></vue-tailwind-pagination-umd>
+  </div>
 
 
 		<div class="inline-flex overflow-hidden mb-4 w-full  bg-white rounded-lg shadow-md" :class="classMsj">
