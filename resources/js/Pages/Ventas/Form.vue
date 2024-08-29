@@ -17,8 +17,9 @@ const form = useForm({
     montoneto: 0,          // Monto neto (bruto + IGV)
     id: '',                // ID del vendedor (autenticado)
     cliente: '',           // Nombre del cliente
-    productos: []          // Productos seleccionados
-});
+    productos: [],          // Productos seleccionados
+    start_time: ''
+  });
 
 const cantidad = ref(1);
 
@@ -80,17 +81,19 @@ function removeProduct(index) {
 // Enviar formulario
 const submitForm = () => {
     form.montobruto = calculateTotalVenta();
-
+    const start_time = localStorage.getItem('startTime4');
+    localStorage.removeItem('startTime4'); // Resetea el startTime en localStorage
+    form.start_time = start_time;
     form.igv = form.montobruto * 0.18;
     form.montoneto = form.montobruto + form.igv;
     form.productos = selectedProducts.value;
-
+    form.productos = selectedProducts.value;
     form.post(route('ventas.store'), {
         preserveScroll: true,
         onSuccess: () => {
             form.reset();
             selectedProducts.value = [];
-        }
+       }
     });
 };
 

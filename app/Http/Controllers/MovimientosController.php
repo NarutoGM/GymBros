@@ -95,10 +95,22 @@ public function index(Request $request)
 
         // Obtener los movimientos con paginación
         $movimientos = $query->paginate(15);
-
+        
+        $startTime = $request->query('start_time');
+        
+        if ($startTime) {
+            $endTime = now()->timestamp * 1000; // Convertir a milisegundos
+            $timeTaken = $endTime - $startTime; // Diferencia en milisegundos
+        
+            // Convertir a segundos
+            $timeTakenInSeconds = round($timeTaken / 1000, 2);
+        } else {
+            $timeTakenInSeconds = null; // O asigna un valor predeterminado si lo prefieres
+        }
         // Pasar los datos a la vista
         return Inertia::render('Movimiento/Index', [
-            'movimientos' => $movimientos
+            'movimientos' => $movimientos,
+            'timeTakenInSeconds' => $timeTakenInSeconds
         ]);
     }
       //  return response()->json([

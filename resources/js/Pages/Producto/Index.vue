@@ -117,8 +117,9 @@ const timeDifference = ref(0); // Inicializa la referencia para timeDifference
 
 const save = () => { 
     const timeIni = parseInt(localStorage.getItem('startTime'), 10);
-    const currentTime = Date.now(); // Obtener el tiempo actual en milisegundos
-    const timeDifference = Math.round((currentTime - timeIni) / 1000); // Diferencia en segundos
+const currentTime = Date.now(); // Obtener el tiempo actual en milisegundos
+const timeDifference = (currentTime - timeIni) / 1000; // Diferencia en segundos
+
     localStorage.removeItem('startTime'); // Resetea el startTime en localStorage
 
     if (operation == 1) {

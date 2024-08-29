@@ -6,7 +6,7 @@ import WarningButton from '@/Components/WarningButton.vue';
 import Modal from '@/Components/Modal.vue';
 import DarkButton from '@/Components/DarkButton.vue';
 import DeleteButton from '@/Components/DeleteButton.vue';
-import {ref} from 'vue';
+import {ref,onMounted } from 'vue';
 import { Head , useForm} from '@inertiajs/vue3';
 import InputGroup from '@/Components/InputGroup.vue';
 import SelectInput from '@/Components/SelectInput.vue';
@@ -19,7 +19,7 @@ import NavLink from '@/Components/NavLink.vue';
 
 import Swal from 'sweetalert2';
 const props= defineProps({
-	movimientos:{type:Object},flash:{type:Object}
+	movimientos:{type:Object},flash:{type:Object},  timeTakenInSeconds: { type: Number }
 	
 });
 const form = useForm({producto:'',precio:'',stock:'',categoria:'',idCategoria:''});
@@ -145,14 +145,20 @@ const selectedMonth = ref(new Date().getMonth() + 1);
 // Utilizar useForm para gestionar la solicitud
 const form2 = useForm({
   year: selectedYear.value,
-  month: selectedMonth.value
+  month: selectedMonth.value,
+  start_time: ''
+
 });
 
 // Función para actualizar el dashboard
 function updateDashboard() {
   // Actualizar los valores del formulario antes de enviar la solicitud
+  const start_time = localStorage.getItem('startTime2');
+  localStorage.removeItem('startTime2'); // Resetea el startTime en localStorage
+
   form2.year = selectedYear.value;
   form2.month = selectedMonth.value;
+  form2.start_time = start_time;
 
   // Realizar la solicitud GET
   form2.get(route('movimientos.index'), {
@@ -165,7 +171,17 @@ function updateDashboard() {
     }
   });
 }
+const timeMessage = ref(null);
 
+onMounted(() => {
+  if (props.timeTakenInSeconds !== null) {
+    setTimeout(() => {
+      if (timeMessage.value) {
+        timeMessage.value.style.display = 'none';
+      }
+    }, 3000); // Ocultar después de 3 segundos
+  }
+});
 </script>
 
 <template>
@@ -175,6 +191,23 @@ function updateDashboard() {
 		<template #header>
 			REPORTE DE ENTRADAS Y SALIDAS //
 		</template>
+
+
+        <div>
+
+
+            <div>
+    <p
+      v-if="props.timeTakenInSeconds !== null"
+      class="bg-green-500 text-white p-4 rounded-md"
+      ref="timeMessage"
+    >
+      Tiempo transcurrido: {{ props.timeTakenInSeconds }} segundos
+    </p>
+  </div>
+  
+  <!-- Resto de tu código -->
+  </div>
 
         <div class="pb-2 flex justify-between items-center">
     <div class="flex space-x-4 mt-4">
