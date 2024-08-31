@@ -77,7 +77,7 @@ class MiembrosController extends Controller
     public function index(Request $request)
     {   
         $membresias=Membresias::all();
-        $miembros = Miembros::with('membresias:idMembresia,nombre')->paginate(2);
+        $miembros = Miembros::with('membresias:idMembresia,nombre')->paginate(5);
         
         return Inertia::render('Miembros/Index', [
             'miembros' => $miembros,
@@ -89,25 +89,34 @@ class MiembrosController extends Controller
     {
         // Validar los datos del formulario
         $request->validate([
-            'nombre' => 'required|max:90',
-            'duracion' => 'required|integer|max:90',  // Valida que 'duracion' sea un número entero
-            'precio' => 'required|numeric',  // Valida que 'precio' sea un número decimal
-        
-            // Agrega más reglas de validación según sea necesario
+            'dni' => 'required|digits:8|unique:miembros,dni',  // Valida que 'dni' tenga 8 dígitos y sea único en la tabla 'miembros'
+            'nombre' => 'required|max:90',  // Valida que 'nombre' sea requerido y tenga un máximo de 90 caracteres
+            'direccion' => 'required|max:255',  // Valida que 'direccion' sea requerido y tenga un máximo de 255 caracteres
+            'telefono' => 'required|digits_between:9,15',  // Valida que 'telefono' tenga entre 9 y 15 dígitos
+            'edad' => 'required|integer|min:0|max:120',  // Valida que 'edad' sea un número entero entre 0 y 120
+            'nombreContacto' => 'required|max:90',  // Valida que 'nombreContacto' sea requerido y tenga un máximo de 90 caracteres
+            'enfermedad' => 'nullable|max:255',  // Valida que 'enfermedad' no exceda los 255 caracteres (es opcional)
+            'institucion' => 'nullable|max:255'  // Valida que 'institucion' no exceda los 255 caracteres (es opcional)
         ]);
     
-        // Verificar si ya existe un curso con el código proporcionado
-
-        $membresia = new Membresias();
-        $membresia->nombre = $request->nombre;  // Assigning the value 
-        $membresia->duracion = $request->duracion;  // Assigning the value of NombreCurso
-        $membresia->precio = $request->precio;  // Assigning the value of NombreCurso
-        $membresia->save();
+        // Crear un nuevo miembro con los datos validados
+        $miembro = new Miembros(); // Asegúrate de usar el modelo correcto (probablemente sea singular: `Miembro`)
+        $miembro->dni = $request->dni;
+        $miembro->nombre = $request->nombre;
+        $miembro->direccion = $request->direccion;
+        $miembro->telefono = $request->telefono;
+        $miembro->edad = $request->edad;
+        $miembro->nombreContacto = $request->nombreContacto;  // Asegúrate de que esta columna existe en la tabla
+        $miembro->enfermedad = $request->enfermedad;
+        $miembro->institucion = $request->institucion;
+        
+        // Guardar el nuevo miembro en la base de datos
+        $miembro->save();
     
-        // Redirigir a la página de índice de cursos u otra página
-        return redirect()->route('membresias.index');
-       //  return response()->json([    'NombreCurso' => $request->NombreCurso, 'CodCurso' => $request->CodCurso]);
+        // Redirigir a la página de índice de miembros u otra página
+        return redirect()->route('miembros.index')->with('success', 'Miembro creado exitosamente.');
     }
+    
 
     
     public function destroy( $dni)

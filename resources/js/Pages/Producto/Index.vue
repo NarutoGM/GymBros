@@ -277,13 +277,7 @@ const onPageClick = (event)=>{
 
 
                     <span >NOMBRE DEL PRODUCTO: </span>
-                    <InputGroup :text="'NOMBRE DEL PRODUCTO'"  :require="'required'" v-model="form.producto" :type="'text'">
-						
-                    
-                       -
-
-
-					</InputGroup>   
+                    <InputGroup :text="'NOMBRE DEL PRODUCTO'"  :require="'required'" v-model="form.producto" :type="'text'"></InputGroup>   
 
 					<br>
 					<InputError class="mt-1" :message="form.errors.producto"></InputError>

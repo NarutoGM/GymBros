@@ -81,9 +81,6 @@ function removeProduct(index) {
 // Enviar formulario
 const submitForm = () => {
     form.montobruto = calculateTotalVenta();
-    const start_time = localStorage.getItem('startTime4');
-    localStorage.removeItem('startTime4'); // Resetea el startTime en localStorage
-    form.start_time = start_time;
     form.igv = form.montobruto * 0.18;
     form.montoneto = form.montobruto + form.igv;
     form.productos = selectedProducts.value;

@@ -21,6 +21,7 @@ function toggleAccordion(sectionId) {
   const section = document.getElementById(sectionId);
   section.classList.toggle('hidden');
 }
+
 </script>
 
 <template>
@@ -46,70 +47,85 @@ function toggleAccordion(sectionId) {
         <div class="container mx-auto p-4">
 
           <div class="container mx-auto p-4">
-            <form @submit.prevent="form.post('/ruta/de/registro')">
-                <!-- Acordeón - Datos Personales -->
-                <div class="mb-4 border border-gray-200 rounded-lg">
-                    <button type="button" class="w-full p-4 text-left bg-white border-b border-gray-200 focus:outline-none" @click="toggleAccordion('section1')">
-                        <span class="font-bold">Datos Personales</span>
-                    </button>
-                    <div id="section1" class="hidden p-4">
-                        <div class="mb-4">
-                            <label for="dni" class="block text-sm font-medium text-gray-700">DNI</label>
-                            <input type="text" id="dni" v-model="form.dni" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm">
-                        </div>
-                        <div class="mb-4">
-                            <label for="nombre" class="block text-sm font-medium text-gray-700">Nombre</label>
-                            <input type="text" id="nombre" v-model="form.nombre" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm">
-                        </div>
-                        <div class="mb-4">
-                            <label for="direccion" class="block text-sm font-medium text-gray-700">Dirección</label>
-                            <input type="text" id="direccion" v-model="form.direccion" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm">
-                        </div>
-                        <div class="mb-4">
-                            <label for="telefono" class="block text-sm font-medium text-gray-700">Teléfono</label>
-                            <input type="text" id="telefono" v-model="form.telefono" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm">
-                        </div>
-                        <div class="mb-4">
-                            <label for="edad" class="block text-sm font-medium text-gray-700">Edad</label>
-                            <input type="text" id="edad" v-model="form.edad" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm">
-                        </div>
+            <form @submit.prevent="form.post(route('miembros.store'))">
+                <!-- Datos Personales -->
+                <div class="mb-6">
+                    <h3 class="text-lg font-semibold">Datos Personales</h3>
+                    <!-- DNI -->
+                    <div class="mt-4">
+                        <label for="dni" class="block text-sm font-medium text-gray-700">DNI</label>
+                        <input type="number" v-model="form.dni" id="dni" class="mt-1 block w-full p-2 border border-gray-300 rounded-md"
+                               :class="{ 'border-red-500': form.errors.dni }">
+                        <span v-if="form.errors.dni" class="text-red-500 text-sm">{{ form.errors.dni }}</span>
+                    </div>
+
+                    <!-- Nombre -->
+                    <div class="mt-4">
+                        <label for="nombre" class="block text-sm font-medium text-gray-700">Nombre</label>
+                        <input type="text" v-model="form.nombre" id="nombre" class="mt-1 block w-full p-2 border border-gray-300 rounded-md"
+                               :class="{ 'border-red-500': form.errors.nombre }">
+                        <span v-if="form.errors.nombre" class="text-red-500 text-sm">{{ form.errors.nombre }}</span>
+                    </div>
+
+                    <!-- Dirección -->
+                    <div class="mt-4">
+                        <label for="direccion" class="block text-sm font-medium text-gray-700">Dirección</label>
+                        <input type="text" v-model="form.direccion" id="direccion" class="mt-1 block w-full p-2 border border-gray-300 rounded-md"
+                               :class="{ 'border-red-500': form.errors.direccion }">
+                        <span v-if="form.errors.direccion" class="text-red-500 text-sm">{{ form.errors.direccion }}</span>
+                    </div>
+                    
+                    <!-- Otros campos -->
+                    <!-- Teléfono -->
+                    <div class="mt-4">
+                        <label for="telefono" class="block text-sm font-medium text-gray-700">Teléfono</label>
+                        <input type="text" v-model="form.telefono" id="telefono" class="mt-1 block w-full p-2 border border-gray-300 rounded-md"
+                               :class="{ 'border-red-500': form.errors.telefono }">
+                        <span v-if="form.errors.telefono" class="text-red-500 text-sm">{{ form.errors.telefono }}</span>
+                    </div>
+
+                    <!-- Edad -->
+                    <div class="mt-4">
+                        <label for="edad" class="block text-sm font-medium text-gray-700">Edad</label>
+                        <input type="number" v-model="form.edad" id="edad" class="mt-1 block w-full p-2 border border-gray-300 rounded-md"
+                               :class="{ 'border-red-500': form.errors.edad }">
+                        <span v-if="form.errors.edad" class="text-red-500 text-sm">{{ form.errors.edad }}</span>
                     </div>
                 </div>
 
-                <!-- Acordeón - Contacto de Emergencia -->
-                <div class="mb-4 border border-gray-200 rounded-lg">
-                    <button type="button" class="w-full p-4 text-left bg-white border-b border-gray-200 focus:outline-none" @click="toggleAccordion('section2')">
-                        <span class="font-bold">Contacto de Emergencia</span>
-                    </button>
-                    <div id="section2" class="hidden p-4">
-                        <div class="mb-4">
-                            <label for="nombreContacto" class="block text-sm font-medium text-gray-700">Nombre del Contacto</label>
-                            <input type="text" id="nombreContacto" v-model="form.nombreContacto" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm">
-                        </div>
-                        <div class="mb-4">
-                            <label for="telefonoContacto" class="block text-sm font-medium text-gray-700">Teléfono del Contacto</label>
-                            <input type="text" id="telefonoContacto" v-model="form.telefonoContacto" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm">
-                        </div>
+                <!-- Contacto de Emergencia -->
+                <div class="mb-6">
+                    <h3 class="text-lg font-semibold">Contacto de Emergencia</h3>
+                    <!-- Nombre del Contacto -->
+                    <div class="mt-4">
+                        <label for="nombreContacto" class="block text-sm font-medium text-gray-700">Nombre del Contacto</label>
+                        <input type="text" v-model="form.nombreContacto" id="nombreContacto" class="mt-1 block w-full p-2 border border-gray-300 rounded-md"
+                               :class="{ 'border-red-500': form.errors.nombreContacto }">
+                        <span v-if="form.errors.nombreContacto" class="text-red-500 text-sm">{{ form.errors.nombreContacto }}</span>
                     </div>
                 </div>
 
-                <!-- Acordeón - Condición de Salud -->
-                <div class="mb-4 border border-gray-200 rounded-lg">
-                    <button type="button" class="w-full p-4 text-left bg-white border-b border-gray-200 focus:outline-none" @click="toggleAccordion('section3')">
-                        <span class="font-bold">Condición de Salud</span>
-                    </button>
-                    <div id="section3" class="hidden p-4">
-                        <div class="mb-4">
-                            <label for="enfermedad" class="block text-sm font-medium text-gray-700">Enfermedad</label>
-                            <input type="text" id="enfermedad" v-model="form.enfermedad" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm">
-                        </div>
-                        <div class="mb-4">
-                            <label for="institucion" class="block text-sm font-medium text-gray-700">Institución de Salud</label>
-                            <input type="text" id="institucion" v-model="form.institucion" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm">
-                        </div>
+                <!-- Condición de Salud -->
+                <div class="mb-6">
+                    <h3 class="text-lg font-semibold">Condición de Salud</h3>
+                    <!-- Enfermedad -->
+                    <div class="mt-4">
+                        <label for="enfermedad" class="block text-sm font-medium text-gray-700">Enfermedad</label>
+                        <input type="text" v-model="form.enfermedad" id="enfermedad" class="mt-1 block w-full p-2 border border-gray-300 rounded-md"
+                               :class="{ 'border-red-500': form.errors.enfermedad }">
+                        <span v-if="form.errors.enfermedad" class="text-red-500 text-sm">{{ form.errors.enfermedad }}</span>
+                    </div>
+
+                    <!-- Institución -->
+                    <div class="mt-4">
+                        <label for="institucion" class="block text-sm font-medium text-gray-700">Institución</label>
+                        <input type="text" v-model="form.institucion" id="institucion" class="mt-1 block w-full p-2 border border-gray-300 rounded-md"
+                               :class="{ 'border-red-500': form.errors.institucion }">
+                        <span v-if="form.errors.institucion" class="text-red-500 text-sm">{{ form.errors.institucion }}</span>
                     </div>
                 </div>
 
+                <!-- Botón de Enviar -->
                 <div class="mt-4">
                     <DarkButton type="submit">Registrar</DarkButton>
                 </div>

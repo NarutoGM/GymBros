@@ -62,6 +62,8 @@ Route::middleware('auth')->group(function () {
     Route::resource('/membresias', MembresiaController::class);
 
     Route::resource('/miembros', MiembrosController::class);
+
+    
     Route::resource('/movimientos', MovimientosController::class);
 
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
