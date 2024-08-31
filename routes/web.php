@@ -57,6 +57,8 @@ Route::middleware('auth')->group(function () {
     Route::resource('/productos', ProductosController::class);
     Route::resource('/categorias', CategoriasController::class);
     Route::resource('/ventas', VentasController::class);
+    Route::get('/ventas/imprimir/{id}', [VentasController::class, 'imprimir'])->name('ventas.imprimir');
+
     Route::resource('/membresias', MembresiaController::class);
 
     Route::resource('/miembros', MiembrosController::class);

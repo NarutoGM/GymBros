@@ -12,6 +12,7 @@ use App\Models\Ventas;
 use COM;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
+require_once public_path('fpdf186/fpdf.php');
 
 use function Laravel\Prompts\alert;
 
@@ -60,18 +61,123 @@ class VentasController extends Controller
 
     }
 
+    public function imprimir(string $id)
+{
+    // Encuentra la venta por su ID usando Eloquent
+    $venta = Ventas::findOrFail($id);
+    $detalleVenta = Detalle_venta::where('idVentas', $venta->idVentas)->get();
+
+    // Crear instancia del objeto PDF
+    $pdf = new \FPDF();
+    $pdf->AddPage('P', 'A4');
+
+    // Configura los márgenes
+    $pdf->SetMargins(25, 25, 25);
+
+    // Configura la fuente
+    $pdf->SetFont('Arial', 'B', 16);
+    $pdf->Cell(0, 10, utf8_decode("DETALLES DE VENTA"), 0, 1, 'C');
+    $pdf->Ln(10);
+
+    // Información de la venta
+    $pdf->SetFont('Arial', '', 12);
+    $pdf->Cell(40, 10, 'Venta ID:', 0, 0);
+    $pdf->Cell(0, 10, utf8_decode($venta->idVentas), 0, 1);
+
+    $pdf->Cell(40, 10, 'Fecha:', 0, 0);
+    $pdf->Cell(0, 10, utf8_decode($venta->fecha), 0, 1);
+
+    $pdf->Ln(10);
+
+    // Detalles de la venta
+    $pdf->SetFont('Arial', 'B', 12);
+    $pdf->Cell(80, 10, 'Producto', 1);
+    $pdf->Cell(30, 10, 'Cantidad', 1);
+    $pdf->Cell(30, 10, 'Precio Unitario', 1);
+    $pdf->Cell(30, 10, 'Total', 1);
+    $pdf->Ln();
+
+    $pdf->SetFont('Arial', '', 12);
+
+    foreach ($detalleVenta as $detalle) {
+
+        $producto = Producto::where('idProducto', $detalle->idProducto)->firstOrFail();
+
+        $pdf->Cell(80, 10, utf8_decode($producto->producto), 1);
 
 
+        $pdf->Cell(30, 10, $detalle->cantidad, 1);
+        $pdf->Cell(30, 10, number_format($detalle->precio, 2), 1);
+        $pdf->Cell(30, 10, number_format($detalle->cantidad * $detalle->precio, 2), 1);
+        $pdf->Ln();
+    }
+
+    $pdf->Ln(10);
+
+    // Total general
+    $total = $detalleVenta->sum(function ($detalle) {
+        return $detalle->cantidad * $detalle->precio;
+    });
+
+    $pdf->SetFont('Arial', 'B', 12);
+    $pdf->Cell(140, 10, 'Total:', 1);
+    $pdf->Cell(30, 10, number_format($total, 2), 1);
+    $pdf->Ln(20);
+
+    // Firmas
+    $pdf->SetFont('Arial', 'B', 12);
+
+    $pdf->Cell(0, 10, utf8_decode('Firmado por: ' . auth()->user()->name), 0, 1);
+    $pdf->Ln(10);
+
+    // Salida del PDF para visualización
+    $pdfOutput = $pdf->Output('S'); // 'S' para obtener el PDF como cadena
+
+    return response($pdfOutput, 200)
+        ->header('Content-Type', 'application/pdf')
+        ->header('Content-Disposition', 'inline; filename="Venta_'.$venta->idVentas.'.pdf"');
+}
+
+    
 
     public function index(Request $request)
     {
         $user=User::all();
-        $ventas = Ventas::with('user:id,name')->paginate(15);
+        $query = Ventas::with('user:id,name');
 
+        
+        $year = $request->query('year');
+        $month = $request->query('month');
+
+        if (!empty($year) && !empty($month)) {
+            $query->whereYear('fecha', $year)
+                  ->whereMonth('fecha', $month);
+        } elseif (!empty($year)) { // Filtrar solo por año si el mes no está presente
+            $query->whereYear('fecha', $year);
+        } elseif (!empty($month)) { // Filtrar solo por mes si el año no está presente
+            $query->whereMonth('fecha', $month);
+        }
+
+        // Obtener los movimientos con paginación
+        $ventas = $query->paginate(15);
+        
     //   return response()->json([    'ventas' => $ventas]);
+    $startTime = $request->query('start_time');
+        
+    if ($startTime) {
+        $endTime = now()->timestamp * 1000; // Convertir a milisegundos
+        $timeTaken = $endTime - $startTime; // Diferencia en milisegundos
+    
+        // Convertir a segundos
+        $timeTakenInSeconds = round($timeTaken / 1000, 2);
+    } else {
+        $timeTakenInSeconds = null; // O asigna un valor predeterminado si lo prefieres
+    }
 
         return Inertia::render('Ventas/Index', [
-            'ventas' => $ventas
+            'ventas' => $ventas,
+            'timeTakenInSeconds' => $timeTakenInSeconds
+
             ]);
     }
   //  public function store(Request $request)
@@ -85,6 +191,8 @@ class VentasController extends Controller
       
     public function store(Request $request)
     {
+
+
         // Validación (opcional)
       //  $request->validate([
     //        'tipofacturacion' => 'required|string',
@@ -133,8 +241,13 @@ class VentasController extends Controller
     
                 $movimiento->save();
             }
-        
-     return redirect()->route('ventas.index')->with('success', 'Venta registrada con éxito');
+
+            $startTime = $request->startTime;  // Asignar el valor 
+
+
+   //  return response()->json([    'startTime' => $startTime]);
+
+    return redirect()->route('ventas.index')->with('success', 'Venta registrada con éxito en segundos' );
  }
     
 

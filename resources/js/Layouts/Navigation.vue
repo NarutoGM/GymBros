@@ -64,7 +64,11 @@
             <template #icon>
               <img src="/images/compras.png" alt="" width="15%">
             </template>
-            VENTAS
+
+            <a @click="saveTimeInLocalStorage3">
+                    <div class="flex"></div> VENTAS
+                </a>
+            
           </NavLink>
         </li>
 
@@ -106,7 +110,10 @@
   <template #icon>
     <img src="/images/reporte-de-negocios.png" alt="" width="15%">
   </template>
-  MOVIMIENTOS
+
+                <a @click="saveTimeInLocalStorage2">
+                    <div class="flex"></div> MOVIMIENTOS
+                </a>
 </NavLink>
 </li> 
       </ul>
@@ -127,6 +134,13 @@ export default {
   methods: {
     saveTimeInLocalStorage() {
       localStorage.setItem('startTime', Date.now());
+    },
+    saveTimeInLocalStorage2() {
+      localStorage.setItem('startTime2', Date.now());
+    },
+    saveTimeInLocalStorage3() {
+      localStorage.setItem('startTime3', Date.now());
+
     }
   },
   setup() {
