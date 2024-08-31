@@ -11,7 +11,7 @@
             <template #icon>
              <img src="/images/supervision.png" alt="" width="15%">
             </template>
-            Dashboard
+            Dashboards
           </NavLink>
         </li>
 
