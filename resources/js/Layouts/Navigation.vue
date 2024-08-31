@@ -96,7 +96,7 @@
             <template #icon>
               <img src="/images/lista-de-verificacion.png" alt="" width="15%">
             </template>
-            MARCAR ASISTENCIA
+            MARCAR ASISTENCIAS
           </NavLink>
         </li>       
 
