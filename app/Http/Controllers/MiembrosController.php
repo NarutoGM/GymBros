@@ -8,6 +8,7 @@ use App\Models\Miembros;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Storage;
+use Nette\Utils\Strings;
 
 use function Laravel\Prompts\alert;
 
@@ -18,17 +19,15 @@ class MiembrosController extends Controller
     const PAGINATION =25;
   public function edit(Request $request,$dni)
     {
-        $miembros = Miembros::where('dni', $dni)->first();
+        $miembros = Miembros::with('membresias:idMembresia,nombre')->where('dni',$dni)->first();
         $membresias=Membresias::all();
 
-        return Inertia::render('Miembros/Edit', [
-            'miembros' => $miembros,
-            'membresias' => $membresias, 
-            'membresiasOfMiembros' => $miembros->membresias,
-        ]);
+          return Inertia::render('Miembros/Edit', [
+              'miembros' => $miembros,
+              'membresias' => $membresias
+          ]);
 
-     //   return response()->json([    'miembros' => $miembros, 'membresias' => $membresias,'membresiasOfMiembros' => $miembros->membresias]);
-
+       // return response()->json([    'miembros' => $miembros, 'membresias' => $membresias]);
     }
     
     public function show(string $dni)
@@ -42,28 +41,38 @@ class MiembrosController extends Controller
         ]);
     }
     
-    public function update(string $dni)
+    public function update(Request $request,  string $id)
     {
+        // Validar los datos del formulario
         $request->validate([
-            'nombre' => 'required|max:90',
-            'duracion' => 'required|integer|max:90',  // Valida que 'duracion' sea un número entero
-            'precio' => 'required|numeric',  // Valida que 'precio' sea un número decimal
-        
-            // Agrega más reglas de validación según sea necesario
+            'dni' => 'required|digits:8',  // Valida que 'dni' tenga 8 dígitos y sea único en la tabla 'miembros'
+            'nombre' => 'required|max:90',  // Valida que 'nombre' sea requerido y tenga un máximo de 90 caracteres
+            'direccion' => 'required|max:255',  // Valida que 'direccion' sea requerido y tenga un máximo de 255 caracteres
+            'telefono' => 'required|digits:9',  // Valida que 'telefono' tenga exactamente 9 dígitos
+            'telefonoContacto' => 'required|digits:9',  // Valida que 'telefono' tenga exactamente 9 dígitos
+            'edad' => 'required|integer|min:0|max:120',  // Valida que 'edad' sea un número entero entre 0 y 120
+            'nombreContacto' => 'required|max:90',  // Valida que 'nombreContacto' sea requerido y tenga un máximo de 90 caracteres
+            'enfermedad' => 'nullable|max:255',  // Valida que 'enfermedad' no exceda los 255 caracteres (es opcional)
+            'institucion' => 'nullable|max:255'  // Valida que 'institucion' no exceda los 255 caracteres (es opcional)
         ]);
     
-        // Buscar el curso por su CodCurso
-        $membresia = Membresias::where('idMembresia', $idMembresia)->firstOrFail();
+        $miembro = Miembros::where('dni', $id)->first();
+
+        $miembro->nombre = $request->nombre;
+        $miembro->direccion = $request->direccion;
+        $miembro->telefono = $request->telefono;
+        $miembro->edad = $request->edad;
+        $miembro->nombreContacto = $request->nombreContacto;  // Asegúrate de que esta columna existe en la tabla
+        $miembro->enfermedad = $request->enfermedad;
+        $miembro->institucion = $request->institucion;
+        $miembro->telefonoContacto = $request->telefonoContacto;
+
+        // Guardar el nuevo miembro en la base de datos
+        $miembro->save();
     
-        $membresia->nombre = $request->nombre;  // Assigning the value 
-        $membresia->duracion = $request->duracion;  // Assigning the value of NombreCurso
-        $membresia->precio = $request->precio;  // Assigning the value of NombreCurso
-        $membresia->save();
-    
-        // Redireccionar a la vista de índice de cursos
-        return redirect()->route('membresias.index');
+        // Redirigir a la página de índice de miembros u otra página
+        return redirect()->route('miembros.index')->with('success', 'Información editada exitosamente.');
     }
-    
 
 
     public function create()
@@ -92,7 +101,8 @@ class MiembrosController extends Controller
             'dni' => 'required|digits:8|unique:miembros,dni',  // Valida que 'dni' tenga 8 dígitos y sea único en la tabla 'miembros'
             'nombre' => 'required|max:90',  // Valida que 'nombre' sea requerido y tenga un máximo de 90 caracteres
             'direccion' => 'required|max:255',  // Valida que 'direccion' sea requerido y tenga un máximo de 255 caracteres
-            'telefono' => 'required|digits_between:9,15',  // Valida que 'telefono' tenga entre 9 y 15 dígitos
+            'telefono' => 'required|digits:9',  // Valida que 'telefono' tenga exactamente 9 dígitos
+            'telefonoContacto' => 'required|digits:9',  // Valida que 'telefono' tenga exactamente 9 dígitos
             'edad' => 'required|integer|min:0|max:120',  // Valida que 'edad' sea un número entero entre 0 y 120
             'nombreContacto' => 'required|max:90',  // Valida que 'nombreContacto' sea requerido y tenga un máximo de 90 caracteres
             'enfermedad' => 'nullable|max:255',  // Valida que 'enfermedad' no exceda los 255 caracteres (es opcional)
@@ -109,9 +119,10 @@ class MiembrosController extends Controller
         $miembro->nombreContacto = $request->nombreContacto;  // Asegúrate de que esta columna existe en la tabla
         $miembro->enfermedad = $request->enfermedad;
         $miembro->institucion = $request->institucion;
-        
+        $miembro->telefonoContacto = $request->telefonoContacto;
+
         // Guardar el nuevo miembro en la base de datos
-        $miembro->save();
+         $miembro->save();
     
         // Redirigir a la página de índice de miembros u otra página
         return redirect()->route('miembros.index')->with('success', 'Miembro creado exitosamente.');

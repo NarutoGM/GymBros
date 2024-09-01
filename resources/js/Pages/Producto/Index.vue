@@ -20,7 +20,7 @@ import Swal from 'sweetalert2';
 const props= defineProps({
 	producto:{type:Object},flash:{type:Object},categoria:{type:Object} // Asegúrate de que `timeDifference` esté definido como prop	
 });
-const form = useForm({producto:'',precio:'',stock:'',categoria:'',idCategoria:'',numero:'',tiempoini: localStorage.getItem('productosIndexClickTime') || ''});
+const form = useForm({producto:'',precio:'',stock:'',categoria:'',idCategoria:'',numero:''});
 
 const v = ref({	producto:'',idCategoria:'',precio:'',stock:''});
 
@@ -116,9 +116,6 @@ const closeModalForm2 = () =>{
 const timeDifference = ref(0); // Inicializa la referencia para timeDifference
 
 const save = () => { 
-    const timeIni = parseInt(localStorage.getItem('startTime'), 10);
-const currentTime = Date.now(); // Obtener el tiempo actual en milisegundos
-const timeDifference = (currentTime - timeIni) / 1000; // Diferencia en segundos
 
     localStorage.removeItem('startTime'); // Resetea el startTime en localStorage
 
@@ -133,7 +130,7 @@ const timeDifference = (currentTime - timeIni) / 1000; // Diferencia en segundos
             });
         }else{
             form.put(route('productos.update', form.idProducto), {
-                onSuccess: () => { ok('Entradas añadidas en ' + timeDifference + ' segundos') }
+                onSuccess: () => { ok('Entradas añadidas con exito') }
             });
         }
         
