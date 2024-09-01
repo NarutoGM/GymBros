@@ -65,7 +65,7 @@ function toggleAccordion(sectionId) {
                     <div id="section1" class="hidden p-4">
                         <div class="mb-4">
                           <label for="dni" class="block text-sm font-medium text-gray-700">DNI</label>
-                        <input type="number" v-model="form.dni" id="dni" class="mt-1 block w-full p-2 border border-gray-300 rounded-md"
+                        <input type="number" readonly  v-model="form.dni" id="dni" class="mt-1 block w-full p-2 border border-gray-300 bg-gray-200 rounded-md"
                                :class="{ 'border-red-500': form.errors.dni }">
                         <span v-if="form.errors.dni" class="text-red-500 text-sm">{{ form.errors.dni }}</span>
                         </div>
