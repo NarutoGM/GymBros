@@ -86,7 +86,7 @@ AWS_USE_PATH_STYLE_ENDPOINT=false
 
 VITE_APP_NAME="${APP_NAME}"
  ```
-2. **Ejecutar el proyecto:**
+4. **Ejecutar el proyecto:**
    ```bash
    php artisan serve
    npm run dev
