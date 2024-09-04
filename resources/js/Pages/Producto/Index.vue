@@ -20,7 +20,7 @@ import Swal from 'sweetalert2';
 const props= defineProps({
 	producto:{type:Object},flash:{type:Object},categoria:{type:Object} // Asegúrate de que `timeDifference` esté definido como prop	
 });
-const form = useForm({producto:'',precio:'',stock:'',categoria:'',idCategoria:'',numero:''});
+const form = useForm({producto:'',precio:'',stock:'',categoria:'',idCategoria:'',numero:'',imagen: null});
 
 const v = ref({	producto:'',idCategoria:'',precio:'',stock:''});
 
@@ -103,6 +103,7 @@ const deletedProductos= (idProducto,producto) =>{
     });
 }
 
+
 const closeModalForm = () =>{
 	showModalForm.value = false;
 	form.reset();
@@ -117,7 +118,6 @@ const timeDifference = ref(0); // Inicializa la referencia para timeDifference
 
 const save = () => { 
 
-    localStorage.removeItem('startTime'); // Resetea el startTime en localStorage
 
     if (operation == 1) {
         form.post(route('productos.store'), {
@@ -159,6 +159,14 @@ const formPage = useForm({});
 
 const onPageClick = (event)=>{
     formPage.get(route('productos.index',{page:event}));
+}
+
+
+const handleImageUpload = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+        form.imagen = file;
+    }
 }
 
 </script>
@@ -216,6 +224,8 @@ const onPageClick = (event)=>{
             <thead>
                 <tr class="text-sm font-semibold tracking-wide text-gray-100 uppercase border-b bg-blue-800">
                     <th class="px-1 py-3 text-center">PRODUCTO</th>
+
+                    <th class="px-1 py-3 text-center">NOMBRE COMERCIAL</th>
                     <th class="px-1 py-3 text-center">CATEGORIA</th>
                     <th class="px-1 py-3 text-center">PRECIO S/.</th>
                     <th class="px-1 py-3 text-center">STOCK</th>
@@ -227,6 +237,13 @@ const onPageClick = (event)=>{
             </thead>
             <tbody class="text-gray-900 font-bold divide-y dark:divide-gray-700 dark:bg-blue-50">
                 <tr v-for="(b, i) in producto.data" :key="b.idProducto" class="text-gray-500">
+                    <td class="px-4 py-3 text-center">
+    <div class="flex justify-center">
+        <img v-if="b.imagen" :src="`/storage/${b.imagen}`" alt="Imagen del Producto" class="h-24 w-24 object-cover">
+    </div>
+</td>
+
+
                     <td class="px-1 py-3 text-sm text-center">{{ b.producto }}</td>
                     <td class="px-1 py-3 text-sm text-center">{{ b.categoria.categoria }}</td>
                     <td class="px-1 py-3 text-sm text-center">{{ b.precio }}</td>
@@ -268,54 +285,39 @@ const onPageClick = (event)=>{
     </div>
 </div>
 <Modal :show="showModalForm" @close="closeModalForm">
-			<div class="p-6">
-                 <h2 class="text-lg font-medium text-gray-900">{{ title }}</h2>
-				 <div class="m-6 mb-6 space-y-6 max-w-xl ">
+    <div class="p-6">
+        <h2 class="text-lg font-medium text-gray-900">{{ title }}</h2>
+        <div class="m-6 mb-6 space-y-6 max-w-xl ">
 
+            <span>NOMBRE DEL PRODUCTO: </span>
+            <InputGroup :text="'NOMBRE DEL PRODUCTO'" :require="'required'" v-model="form.producto" :type="'text'"></InputGroup>   
+            <br>
+            <InputError class="mt-1" :message="form.errors.producto"></InputError>
 
-                    <span >NOMBRE DEL PRODUCTO: </span>
-                    <InputGroup :text="'NOMBRE DEL PRODUCTO'"  :require="'required'" v-model="form.producto" :type="'text'"></InputGroup>   
+            <span>CATEGORIA: </span>
+            <SelectInput :text="'CATEGORIA'" :require="'required'" v-model="form.idCategoria" :type="'text'" :options="categoria"></SelectInput>
+            <br>
+            <InputError class="mt-1" :message="form.errors.idCategoria"></InputError>
 
-					<br>
-					<InputError class="mt-1" :message="form.errors.producto"></InputError>
+            <span>PRECIO: </span>
+            <InputGroup :text="'PRECIO'" :require="'required'" v-model="form.precio" :type="'number'" step="0.01"></InputGroup>
+            <br>
+            <InputError class="mt-1" :message="form.errors.precio"></InputError>
 
-                    <span >CATEGORIA: </span>
+            <!-- Nuevo campo para subir imagen -->
+            <span>IMAGEN DEL PRODUCTO: </span>
+            <input type="file" @change="handleImageUpload">
+            <br>
+            <InputError class="mt-1" :message="form.errors.imagen"></InputError>
 
-					<SelectInput :text="'CATEGORIA'" :require="'required'" v-model="form.idCategoria" :type="'text'" :options="categoria">
-						
-                       
+            <PrimaryButton @click="save">Guardar</PrimaryButton>
+        </div>
+    </div>
+    <div class="m-6 flex justify-end">
+        <SecondaryButton @click="closeModalForm">Cancel</SecondaryButton>
+    </div>
+</Modal>
 
-
-
-					</SelectInput>
-                    <br>
-					<InputError class="mt-1" :message="form.errors.idCategoria"></InputError>
-
-                    <span >PRECIO: </span>
-
-                    <InputGroup  :text="'PRECIO'" :require="'required'" v-model="form.precio" :type="'number'" step="0.01">
-						
-                        -
-
-
-
-					</InputGroup>
-                    <br>
-					<InputError  class="mt-1" :message="form.errors.precio"></InputError>
-
-                    
-
-                         
-
-					
-
-					<PrimaryButton @click="save">Guardar</PrimaryButton>
-				 </div>
-			</div>
-			<div class="m-6 flex justify-end">
-				<SecondaryButton @click="closeModalForm">Cancel</SecondaryButton>
-			</div>
-		</Modal>
 
    
         <Modal :show="showModalForm2" @close="closeModalForm2">

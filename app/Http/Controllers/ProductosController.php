@@ -118,30 +118,38 @@ class ProductosController extends Controller
     
     public function store(Request $request)
     {
-        // Validar los datos del formulario
+        // Validación de los campos, incluyendo la imagen
         $request->validate([
             'producto' => 'required|max:90',
-            'idCategoria' => 'required|integer',  // Valida que 'duracion' sea un número entero
+            'idCategoria' => 'required|integer',  // Valida que 'idCategoria' sea un número entero
             'precio' => 'required|numeric',  // Valida que 'precio' sea un número decimal
-     //       'stock' => 'required|integer',  // Valida que 'precio' sea un número decimal
-
-            // Agrega más reglas de validación según sea necesario
+            'imagen' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',  // Valida que el archivo sea una imagen
         ]);
     
-        // Verificar si ya existe un curso con el código proporcionado
-
+        // Crear un nuevo producto
         $producto = new Producto();
-        $producto->producto = $request->producto;  // Assigning the value 
-        $producto->precio = $request->precio;  // Assigning the value of NombreCurso
-        $producto->idCategoria = $request->idCategoria;  // Assigning the value of NombreCurso
-
-    //    $producto->stock = $request->stock;  // Assigning the value of NombreCurso
-        $producto->save();
+        $producto->producto = $request->producto;
+        $producto->precio = $request->precio;
+        $producto->idCategoria = $request->idCategoria;
     
-        // Redirigir a la página de índice de cursos u otra página
-        return redirect()->route('productos.index');
-       //  return response()->json([    'NombreCurso' => $request->NombreCurso, 'CodCurso' => $request->CodCurso]);
+        // Si se sube una imagen, manejar la subida y almacenar la ruta
+        if ($request->hasFile('imagen')) {
+            $imagen = $request->file('imagen');
+            $nombreImagen = time().'.'.$imagen->getClientOriginalExtension();
+            $rutaImagen = $imagen->storeAs('imagenes', $nombreImagen, 'public'); // Guarda la imagen en storage/app/public/imagenes
+    
+            // Almacena la ruta de la imagen en la base de datos
+            $producto->imagen = $rutaImagen;
+        }
+    
+        // Guardar el producto en la base de datos
+        $producto->save();
+    // return response()->json([    'rutaImagen' => $rutaImagen]);
+        // Redirigir a la lista de productos con un mensaje de éxito
+      return redirect()->route('productos.index')->with('success', 'Producto creado exitosamente.');
     }
+    
+       //  
 
     
     public function destroy( $idProducto)
