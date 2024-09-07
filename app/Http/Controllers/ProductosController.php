@@ -23,7 +23,8 @@ class ProductosController extends Controller
 
     public function update(Request $request, $idProducto)
     {
-    
+         return response()->json([
+             'idCategoria' => $request->idCategoria ]);
         $numero = $request->input('numero');
 
         if ($numero==1){
