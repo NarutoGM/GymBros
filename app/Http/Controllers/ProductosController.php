@@ -23,6 +23,7 @@ class ProductosController extends Controller
 
     public function update(Request $request, $idProducto)
     {
+    
         $numero = $request->input('numero');
 
         if ($numero==1){
@@ -61,6 +62,17 @@ class ProductosController extends Controller
             $producto = Producto::where('idProducto', $idProducto)->firstOrFail();
         
             $producto->stock = $producto->stock + $request->stock;  // Assigning the value of NombreCurso
+            
+                    // Si se sube una imagen, manejar la subida y almacenar la ruta
+        if ($request->hasFile('imagen')) {
+            $imagen = $request->file('imagen');
+            $nombreImagen = time().'.'.$imagen->getClientOriginalExtension();
+            $rutaImagen = $imagen->storeAs('imagenes', $nombreImagen, 'public'); // Guarda la imagen en storage/app/public/imagenes
+    
+            // Almacena la ruta de la imagen en la base de datos
+            $producto->imagen = $rutaImagen;
+        }
+            
             $producto->save();
 
 

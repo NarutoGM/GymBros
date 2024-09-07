@@ -13,8 +13,6 @@ import SelectInput from '@/Components/SelectInput.vue';
 
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import vueTailwindPaginationUmd from '@ocrv/vue-tailwind-pagination';
-import Pagination from '@/Components/Pagination.vue';
-import NavLink from '@/Components/NavLink.vue';
 
 import Swal from 'sweetalert2';
 const props= defineProps({
@@ -30,6 +28,7 @@ const showModalForm2 = ref(false);
 
 let operation = ref(1);
 
+let imagen = null;
 
 
 const title = ref('');
@@ -60,7 +59,7 @@ if (op==1){
    // form.stock=b.stock;
     form.idProducto=b.idProducto;
     form.numero=1;
-
+    form.imagen=b.imagen
     }else{
       showModalForm2.value = true;
 
@@ -107,17 +106,19 @@ const deletedProductos= (idProducto,producto) =>{
 const closeModalForm = () =>{
 	showModalForm.value = false;
 	form.reset();
-
+    imagen='';
 }
 const closeModalForm2 = () =>{
 	showModalForm2.value = false;
 	form.reset();
 
 }
-const timeDifference = ref(0); // Inicializa la referencia para timeDifference
 
 const save = () => { 
-
+    console.log('Producto:', form.producto);
+    console.log('Categoría:', form.idCategoria);
+    console.log('Precio:', form.precio);
+    console.log('Imagen:', form.imagen);
 
     if (operation == 1) {
         form.post(route('productos.store'), {
@@ -160,14 +161,24 @@ const formPage = useForm({});
 const onPageClick = (event)=>{
     formPage.get(route('productos.index',{page:event}));
 }
-
-
+            // Asegúrate de que Vue actualice el DOM
+          //  Vue.nextTick(() => {
+                // Forzar la actualización de la vista previa si es necesario
+           //     imagen = e.target.result; 
+          //  });
 const handleImageUpload = (event) => {
     const file = event.target.files[0];
-    if (file) {
-        form.imagen = file;
-    }
-}
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            imagen = e.target.result; // Almacena la URL base64 en `form.imagen`
+            form.imagen=file;
+        };
+        reader.readAsDataURL(file); // Convierte el archivo a Base64
+      } else {
+        console.log('No se seleccionó un archivo.');
+      }
+};
 
 </script>
 
@@ -306,9 +317,16 @@ const handleImageUpload = (event) => {
 
             <!-- Nuevo campo para subir imagen -->
             <span>IMAGEN DEL PRODUCTO: </span>
+
+            <img v-if="form.imagen && !imagen"  :src="`/storage/${form.imagen}`" alt="Imagen del Producto" class="h-24 w-24 object-cover">
+            <img v-if="imagen" :src="imagen" alt="Vista previa de la imagen" class="h-24 w-24 object-cover">
+
             <input type="file" @change="handleImageUpload">
             <br>
+            
+            
             <InputError class="mt-1" :message="form.errors.imagen"></InputError>
+
 
             <PrimaryButton @click="save">Guardar</PrimaryButton>
         </div>
@@ -316,6 +334,8 @@ const handleImageUpload = (event) => {
     <div class="m-6 flex justify-end">
         <SecondaryButton @click="closeModalForm">Cancel</SecondaryButton>
     </div>
+
+
 </Modal>
 
 
