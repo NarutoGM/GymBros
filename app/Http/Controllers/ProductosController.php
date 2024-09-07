@@ -23,10 +23,8 @@ class ProductosController extends Controller
 
     public function update(Request $request, $idProducto)
     {
-         return response()->json([
-             'idCategoria' => $request->idCategoria ]);
         $numero = $request->input('numero');
-
+        
         if ($numero==1){
         $request->validate([
             'producto' => 'required|max:90',
@@ -44,7 +42,23 @@ class ProductosController extends Controller
         $producto->producto = $request->producto;  // Assigning the value 
         $producto->precio = $request->precio;  // Assigning the value of NombreCurso
       //  $producto->stock = $request->stock;  // Assigning the value of NombreCurso
-        $producto->save();
+     
+     
+      return response()->json([
+        'imagen' => $request->hasFile('imagen')
+    ]);
+
+      if ($request->hasFile('imagen')) {
+        $imagen = $request->file('imagen');
+        $nombreImagen = time().'.'.$imagen->getClientOriginalExtension();
+        $rutaImagen = $imagen->storeAs('imagenes', $nombreImagen, 'public'); // Guarda la imagen en storage/app/public/imagenes
+
+        // Almacena la ruta de la imagen en la base de dato
+
+        $producto->imagen = $rutaImagen;
+    }  
+      
+      $producto->save();
     
         // Redireccionar a la vista de índice de cursos
         return redirect()->route('productos.index');
@@ -65,14 +79,7 @@ class ProductosController extends Controller
             $producto->stock = $producto->stock + $request->stock;  // Assigning the value of NombreCurso
             
                     // Si se sube una imagen, manejar la subida y almacenar la ruta
-        if ($request->hasFile('imagen')) {
-            $imagen = $request->file('imagen');
-            $nombreImagen = time().'.'.$imagen->getClientOriginalExtension();
-            $rutaImagen = $imagen->storeAs('imagenes', $nombreImagen, 'public'); // Guarda la imagen en storage/app/public/imagenes
-    
-            // Almacena la ruta de la imagen en la base de datos
-            $producto->imagen = $rutaImagen;
-        }
+
             
             $producto->save();
 
@@ -90,15 +97,6 @@ class ProductosController extends Controller
             $movimiento->save();
 
             // Redireccionar a la vista de índice de cursos
-
-
- // Calcular el tiempo transcurrido
- //$endTime = now()->timestamp * 1000; // Convertir a milisegundos
- //$timeTaken = $endTime - $request->tiempoini; // Diferencia en milisegundos
-
- // Convertir a segundos (si es necesario)
- //$timeDifference = round($timeTaken / 1000, 2);
-
             return redirect()->route('productos.index');
         }
     }

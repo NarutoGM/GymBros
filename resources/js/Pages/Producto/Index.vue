@@ -115,20 +115,31 @@ const closeModalForm2 = () =>{
 }
 
 const save = () => { 
-    console.log('Producto:', form.producto);
-    console.log('Categoría:', form.idCategoria);
-    console.log('Precio:', form.precio);
-    console.log('Imagen:', form.imagen);
-
     if (operation == 1) {
+        alert(form.imagen);
+
         form.post(route('productos.store'), {
             onSuccess: () => { ok('Producto creado') }
         });
     } else {
+
         if (operation == 2) {
-            form.put(route('productos.update',form.idProducto), {
+   
+            alert(form.imagen);
+
+            form.post(route('productos.update',form.idProducto), {
                 onSuccess: () => { ok('Producto editado') }
             });
+
+            form.post(route('productos.update', form.idProducto), {
+        data: {
+            _method: 'PUT'  // Simular PUT usando POST
+        },
+        onSuccess: () => {
+            ok('Producto editado');
+        }
+    });
+
         }else{
             form.put(route('productos.update', form.idProducto), {
                 onSuccess: () => { ok('Entradas añadidas con exito') }
@@ -167,12 +178,18 @@ const onPageClick = (event)=>{
            //     imagen = e.target.result; 
           //  });
 const handleImageUpload = (event) => {
+    
     const file = event.target.files[0];
       if (file) {
+
+        console.log(file);
+
         const reader = new FileReader();
         reader.onload = (e) => {
             imagen = e.target.result; // Almacena la URL base64 en `form.imagen`
-            form.imagen=file;
+            form.imagen = file;
+
+           // console.log(form.imagen);
         };
         reader.readAsDataURL(file); // Convierte el archivo a Base64
       } else {
