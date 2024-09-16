@@ -1,5 +1,8 @@
 ---
 deployment:
   tasks:
-    - export DEPLOYPATH=/home/shopcrea/public_html/
-    - /bin/rsync -av --delete public/ $DEPLOYPATH
+    - echo "Iniciando despliegue en cPanel"
+    - export REPOPATH=/home/shopcrea/repositories/GymBros
+    - export DEPLOYPATH=/home/shopcrea/public_html
+    - /bin/rsync -av --delete $REPOPATH/public/ $DEPLOYPATH
+    - echo "Despliegue completado"
