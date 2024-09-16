@@ -54,7 +54,10 @@ Route::middleware('auth')->group(function () {
     Route::get('/about', fn () => Inertia::render('About'))->name('about');
 
     Route::get('users', [UserController::class, 'index'])->name('users.index');
+    
     Route::resource('/productos', ProductosController::class);
+    Route::post('/updateprod', [ProductosController::class, 'updateprod'])->name('updateprod');
+
     Route::resource('/categorias', CategoriasController::class);
     Route::resource('/ventas', VentasController::class);
     Route::get('/ventas/imprimir/{id}', [VentasController::class, 'imprimir'])->name('ventas.imprimir');

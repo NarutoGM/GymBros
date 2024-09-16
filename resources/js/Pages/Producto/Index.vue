@@ -116,32 +116,20 @@ const closeModalForm2 = () =>{
 
 const save = () => { 
     if (operation == 1) {
-        alert(form.imagen);
 
         form.post(route('productos.store'), {
             onSuccess: () => { ok('Producto creado') }
         });
+        
     } else {
 
         if (operation == 2) {
-   
-            alert(form.imagen);
-
-            form.post(route('productos.update',form.idProducto), {
-                onSuccess: () => { ok('Producto editado') }
-            });
-
-            form.post(route('productos.update', form.idProducto), {
-        data: {
-            _method: 'PUT'  // Simular PUT usando POST
-        },
-        onSuccess: () => {
-            ok('Producto editado');
-        }
-    });
+        form.post(route('updateprod'), {
+        onSuccess: () => { ok('Producto editado')}
+        });
 
         }else{
-            form.put(route('productos.update', form.idProducto), {
+            form.post(route('updateprod'), {
                 onSuccess: () => { ok('Entradas añadidas con exito') }
             });
         }

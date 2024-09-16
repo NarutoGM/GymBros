@@ -21,8 +21,14 @@ class ProductosController extends Controller
 
     }
 
-    public function update(Request $request, $idProducto)
-    {
+    public function updateprod(Request $request)
+    { 
+         return response()->json([
+             'idProducto' => $request->idProducto
+         ]);
+
+
+        $idProducto=$request->idProducto;
         $numero = $request->input('numero');
         
         if ($numero==1){
@@ -44,19 +50,17 @@ class ProductosController extends Controller
       //  $producto->stock = $request->stock;  // Assigning the value of NombreCurso
      
      
-      return response()->json([
-        'imagen' => $request->hasFile('imagen')
-    ]);
 
-      if ($request->hasFile('imagen')) {
-        $imagen = $request->file('imagen');
-        $nombreImagen = time().'.'.$imagen->getClientOriginalExtension();
-        $rutaImagen = $imagen->storeAs('imagenes', $nombreImagen, 'public'); // Guarda la imagen en storage/app/public/imagenes
+
+     // if ($request->hasFile('imagen')) {
+      //  $imagen = $request->file('imagen');
+      //  $nombreImagen = time().'.'.$imagen->getClientOriginalExtension();
+      //  $rutaImagen = $imagen->storeAs('imagenes', $nombreImagen, 'public'); // Guarda la imagen en storage/app/public/imagenes
 
         // Almacena la ruta de la imagen en la base de dato
 
-        $producto->imagen = $rutaImagen;
-    }  
+    //    $producto->imagen = $rutaImagen;
+   // }  
       
       $producto->save();
     
