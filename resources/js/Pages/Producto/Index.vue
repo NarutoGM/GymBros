@@ -160,11 +160,7 @@ const formPage = useForm({});
 const onPageClick = (event)=>{
     formPage.get(route('productos.index',{page:event}));
 }
-            // Asegúrate de que Vue actualice el DOM
-          //  Vue.nextTick(() => {
-                // Forzar la actualización de la vista previa si es necesario
-           //     imagen = e.target.result; 
-          //  });
+            
 const handleImageUpload = (event) => {
     
     const file = event.target.files[0];

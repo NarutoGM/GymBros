@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
+use Illuminate\Support\Facades\Storage;
 
 use App\Models\Categoria;
 use App\Models\Producto;
@@ -54,13 +55,22 @@ class ProductosController extends Controller
 
       if ($request->hasFile('imagen')) {
         $imagen = $request->file('imagen');
-        $nombreImagen = time().'.'.$imagen->getClientOriginalExtension();
-        $rutaImagen = $imagen->storeAs('imagenes', $nombreImagen, 'public'); // Guarda la imagen en storage/app/public/imagenes
-
-        // Almacena la ruta de la imagen en la base de dato
-
+        $extension = $imagen->getClientOriginalExtension();
+        $hash = md5_file($imagen->getPathname()); // Obtén el hash de la imagen
+        
+        // Define el nombre de la imagen usando el hash
+        $nombreImagen = $hash . '.' . $extension;
+        $rutaImagen = 'imagenes/' . $nombreImagen;
+        
+        // Verifica si la imagen ya existe
+        if (!Storage::disk('public')->exists($rutaImagen)) {
+            // Guarda la imagen si no existe
+            $imagen->storeAs('imagenes', $nombreImagen, 'public');
+        }
+        
+        // Almacena la ruta de la imagen en la base de datos
         $producto->imagen = $rutaImagen;
-    }  
+    }
       
       $producto->save();
     
