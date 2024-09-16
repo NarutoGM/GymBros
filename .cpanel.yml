@@ -1,4 +1,5 @@
 deployment:
   tasks:
-    - export DEPLOYPATH=/home/shopcrea/public_html/
+    - export DEPLOYPATH=/home/shopcrea/public_html/sistema/
     - /bin/rsync -av --delete public/ $DEPLOYPATH
+  
