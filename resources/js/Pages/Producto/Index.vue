@@ -18,7 +18,7 @@ import Swal from 'sweetalert2';
 const props= defineProps({
 	producto:{type:Object},flash:{type:Object},categoria:{type:Object} // Asegúrate de que `timeDifference` esté definido como prop	
 });
-const form = useForm({producto:'',precio:'',stock:'',categoria:'',idCategoria:'',numero:'',imagen: null});
+const form = useForm({producto:'',precio:'',stock:'',categoria:'',idCategoria:'',numero:'',imagen: null,idProducto: ''});
 
 const v = ref({	producto:'',idCategoria:'',precio:'',stock:''});
 

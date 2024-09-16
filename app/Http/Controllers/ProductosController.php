@@ -23,9 +23,9 @@ class ProductosController extends Controller
 
     public function updateprod(Request $request)
     { 
-         return response()->json([
-             'idProducto' => $request->idProducto
-         ]);
+        // return response()->json([
+         //    'numero' => $request->input('numero')
+        // ]);
 
 
         $idProducto=$request->idProducto;
@@ -52,15 +52,15 @@ class ProductosController extends Controller
      
 
 
-     // if ($request->hasFile('imagen')) {
-      //  $imagen = $request->file('imagen');
-      //  $nombreImagen = time().'.'.$imagen->getClientOriginalExtension();
-      //  $rutaImagen = $imagen->storeAs('imagenes', $nombreImagen, 'public'); // Guarda la imagen en storage/app/public/imagenes
+      if ($request->hasFile('imagen')) {
+        $imagen = $request->file('imagen');
+        $nombreImagen = time().'.'.$imagen->getClientOriginalExtension();
+        $rutaImagen = $imagen->storeAs('imagenes', $nombreImagen, 'public'); // Guarda la imagen en storage/app/public/imagenes
 
         // Almacena la ruta de la imagen en la base de dato
 
-    //    $producto->imagen = $rutaImagen;
-   // }  
+        $producto->imagen = $rutaImagen;
+    }  
       
       $producto->save();
     
