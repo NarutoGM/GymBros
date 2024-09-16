@@ -32,7 +32,7 @@
               <img src="/images/suplemento-proteico.png" alt="" width="15%">
 
 
-              <span class="ml-4">SUPLEMENTO'S</span>
+              <span class="ml-4">SUPLEMENTOS</span>
               
             </span>
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" style="  width: 48px;
