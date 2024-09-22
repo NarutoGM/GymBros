@@ -45,9 +45,8 @@ Route::get('/', function () {
 
 Route::get('/', [AuthenticatedSessionController::class, 'create'])->name('login');
 
-Route::get('/dashboard/{month?}/{year?}', [DashBoardController::class, 'index'])
-    ->middleware(['auth', 'verified'])
-    ->name('dashboard');
+Route::get('/dashboard', [DashBoardController::class, 'index'])->name('dashboard');
+
 
 
 Route::middleware('auth')->group(function () {

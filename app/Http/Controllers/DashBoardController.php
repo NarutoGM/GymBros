@@ -56,14 +56,15 @@ class DashBoardController extends Controller
 
 
 
-    public function index(Request $request, $month = null, $year = null)
+    public function index(Request $request)
     {
 
         $query = Movimientos::orderBy('fecha', 'desc'); // Cambia 'desc' a 'asc' si necesitas un orden ascendente
 
-        // Usa el mes y año actuales si no se proporciona ninguno
-        $year = $request->query('year');
-        $month = $request->query('month');
+// Usa el mes y año actuales si no se proporciona ninguno
+$year = $request->query('year', now()->year);   // Si 'year' no está presente, usa el año actual
+$month = $request->query('month', now()->month); // Si 'month' no está presente, usa el mes actual
+
 
         
         if (!empty($year) && !empty($month)) {
