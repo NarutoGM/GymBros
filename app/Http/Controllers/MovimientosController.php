@@ -40,27 +40,7 @@ class MovimientosController extends Controller
         ]);
     }
     
-    public function update(string $dni)
-    {
-        $request->validate([
-            'nombre' => 'required|max:90',
-            'duracion' => 'required|integer|max:90',  // Valida que 'duracion' sea un número entero
-            'precio' => 'required|numeric',  // Valida que 'precio' sea un número decimal
-        
-            // Agrega más reglas de validación según sea necesario
-        ]);
     
-        // Buscar el curso por su CodCurso
-        $membresia = Membresias::where('idMembresia', $idMembresia)->firstOrFail();
-    
-        $membresia->nombre = $request->nombre;  // Assigning the value 
-        $membresia->duracion = $request->duracion;  // Assigning the value of NombreCurso
-        $membresia->precio = $request->precio;  // Assigning the value of NombreCurso
-        $membresia->save();
-    
-        // Redireccionar a la vista de índice de cursos
-        return redirect()->route('membresias.index');
-    }
     
 
 
