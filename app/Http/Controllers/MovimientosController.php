@@ -57,6 +57,8 @@ public function index(Request $request)
         $query = Movimientos::with('productos:idProducto,producto', 'user:id,name')
                              ->orderBy('fecha', 'desc'); // Cambia 'desc' a 'asc' si necesitas un orden ascendente
         
+
+
 // Usa el mes y año actuales si no se proporciona ninguno
 $year = $request->query('year', now()->year);   // Si 'year' no está presente, usa el año actual
 $month = $request->query('month', now()->month); // Si 'month' no está presente, usa el mes actual
@@ -74,7 +76,7 @@ $month = $request->query('month', now()->month); // Si 'month' no está presente
 
         // Obtener los movimientos con paginación
         $movimientos = $query->paginate(15);
-      
+        
         // Pasar los datos a la vista
         return Inertia::render('Movimiento/Index', [
             'movimientos' => $movimientos        ]);

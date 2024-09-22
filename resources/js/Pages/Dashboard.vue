@@ -21,27 +21,21 @@ const ramdom =() =>{
 
 const props = defineProps({
   movimientos: { type: Object },
+  totalproductos: { type: Number },
+
   totalcategorias: { type: Number },
-  productos: { type: Object },
+  producto: { type: Object },
   entradaCount: { type: Number},
-  salidaCount: { type: Number}
-});
-
-props.productos.forEach(row => {
-  prod.value.push(row.producto),
-  mov.value.push(row.movimientos),
-  colors.value.push('rgb(' + ramdom()+ ',' + ramdom()+ ',' + ramdom() + ')')
+  salidaCount: { type: Number},
+  ultimosagregados: { type: Object },
+  ultimosvendidos: { type: Object },
 
 });
 
-chartOptions1.value = {Responsive:true};
 
-chartData1.value = {
-  labels:prod.value,
-  datasets:[{
-    label:'Productos', data:prod.value,backgroundColor:colors
-  }]
-}
+
+
+
 
 const currentYear = new Date().getFullYear();
 
@@ -172,7 +166,7 @@ function updateDashboard() {
     </div>
     <div>
       <p class="mb-2 text-sm font-medium text-gray-600 dark:text-gray-100">PRODUCTOS</p>
-      <p class="text-lg font-semibold text-gray-700 dark:text-gray-200">{{productos.length}}</p>
+      <p class="text-lg font-semibold text-gray-700 dark:text-gray-200">{{totalproductos}}</p>
     </div>
   </div>
 
@@ -191,8 +185,94 @@ function updateDashboard() {
   </div>
 </div>
 
+<br>
+<div class="w-full overflow-hidden rounded-lg border shadow-md">
+    <div class="w-full overflow-x-auto bg-white">
+      <h2 class="text-xl font-bold m-2">Productos bajos en stock </h2>
+
+        <table class="w-full whitespace-nowrap">
+            <thead>
+                <tr class="text-sm font-semibold tracking-wide text-gray-100 uppercase border-b bg-blue-800">
+                    <th class="px-1 py-3 text-center">PRODUCTO</th>
+
+                    <th class="px-1 py-3 text-center">NOMBRE COMERCIAL</th>
+                    <th class="px-1 py-3 text-center">CATEGORIA</th>
+                    <th class="px-1 py-3 text-center">STOCK</th>
+
+                </tr>
+            </thead>
+            <tbody class="text-gray-900 font-bold divide-y dark:divide-gray-700 dark:bg-blue-50">
+                <tr v-for="(b, i) in producto.data" :key="b.idProducto" class="text-gray-500">
+                    <td class="px-4 pyproducto-3 text-center">
+    <div class="flex justify-center">
+        <img v-if="b.imagen" :src="`/storage/${b.imagen}`" alt="Imagen del Producto" class="h-24 w-24 object-cover">
+    </div>
+</td>
 
 
+                    <td class="px-1 py-3 text-sm text-center">{{ b.producto }}</td>
+                    <td class="px-1 py-3 text-sm text-center">{{ b.categoria.categoria }}</td>
+
+                    <td class="px-1 py-3 text-sm text-center text-gray-700" :class="{  'bg-red-400': b.stock < 5,  'bg-orange-300': b.stock >= 6  }"> {{ b.stock }}</td>
+                    
+                   
+
+                    
+
+                    
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+
+<br>
+<div class="flex justify-between space-x-4">
+    <div class="w-1/2">
+      <h2 class="text-xl font-bold mb-2">Últimos Agregados</h2>
+      <table class="min-w-full bg-white border border-gray-300">
+        <thead>
+          <tr class="bg-gray-200">
+            <th class="py-2 px-4 border">Fecha</th>
+            <th class="py-2 px-4 border">Cantidad</th>
+            <th class="py-2 px-4 border">Producto</th>
+            <th class="py-2 px-4 border">Trabajador</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="movimiento in ultimosagregados" :key="movimiento.idMovimientos">
+            <td class="py-2 px-4 border">{{ movimiento.fecha }}</td>
+            <td class="py-2 px-4 border">{{ movimiento.cantidad }}</td>
+            <td class="py-2 px-4 border">{{ movimiento.productos.producto }}</td>
+            <td class="py-2 px-4 border">{{ movimiento.user.name }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="w-1/2">
+      <h2 class="text-xl font-bold mb-2">Últimos Vendidos</h2>
+      <table class="min-w-full bg-white border border-gray-300">
+        <thead>
+          <tr class="bg-gray-200">
+            <th class="py-2 px-4 border">Fecha</th>
+            <th class="py-2 px-4 border">Cantidad</th>
+            <th class="py-2 px-4 border">Producto</th>
+            <th class="py-2 px-4 border">Trabajador</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="movimiento in ultimosvendidos" :key="movimiento.idMovimientos">
+            <td class="py-2 px-4 border">{{ movimiento.fecha }}</td>
+            <td class="py-2 px-4 border">{{ movimiento.cantidad }}</td>
+            <td class="py-2 px-4 border">{{ movimiento.productos.producto }}</td>
+            <td class="py-2 px-4 border">{{ movimiento.user.name }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
 
 		</div>
 	</AuthenticatedLayout>

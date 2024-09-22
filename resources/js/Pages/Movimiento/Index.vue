@@ -99,9 +99,7 @@ const selectedMonth = ref(new Date().getMonth() + 1);
 // Utilizar useForm para gestionar la solicitud
 const form2 = useForm({
   year: selectedYear.value,
-  month: selectedMonth.value,
-  start_time: ''
-
+  month: selectedMonth.value
 });
 
 // Función para actualizar el dashboard
@@ -109,7 +107,6 @@ function updateDashboard() {
   // Actualizar los valores del formulario antes de enviar la solicitud
   form2.year = selectedYear.value;
   form2.month = selectedMonth.value;
-  form2.start_time = start_time;
 
   // Realizar la solicitud GET
   form2.get(route('movimientos.index'), {

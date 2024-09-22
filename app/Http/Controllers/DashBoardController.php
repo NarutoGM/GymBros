@@ -59,8 +59,13 @@ class DashBoardController extends Controller
     public function index(Request $request)
     {
 
-        $query = Movimientos::orderBy('fecha', 'desc'); // Cambia 'desc' a 'asc' si necesitas un orden ascendente
+        $query = Movimientos::orderBy('fecha', 'desc'); // Crea la consulta base
 
+        $ultimosagregados = (clone $query)->with('productos:idProducto,producto', 'user:id,name')->where('tipo', 'E')->take(10)->get(); // Obtiene los últimos 10 agregados
+        
+        $ultimosvendidos = (clone $query)->with('productos:idProducto,producto', 'user:id,name')->where('tipo', 'S')->take(10)->get(); // Clona la consulta para obtener los últimos 10 vendidos
+        
+  //      return response()->json(['ultimosagregados' => $ultimosagregados, 'ultimosvendidos' => $ultimosvendidos]);
 // Usa el mes y año actuales si no se proporciona ninguno
 $year = $request->query('year', now()->year);   // Si 'year' no está presente, usa el año actual
 $month = $request->query('month', now()->month); // Si 'month' no está presente, usa el mes actual
@@ -82,10 +87,17 @@ $month = $request->query('month', now()->month); // Si 'month' no está presente
         $entradaCount = $movimientos->where('tipo', 'E')->count();
         $salidaCount = $movimientos->where('tipo', 'S')->count();
 
+        $producto = Producto::where('stock', '<', 20)->with('categoria:idCategoria,categoria')->paginate(10);
+
+
         return Inertia::render('Dashboard', [
             'movimientos' => $movimientos,
+            'ultimosagregados' =>$ultimosagregados, 
+            'ultimosvendidos' =>$ultimosvendidos, 
+            'totalproductos' => Producto::all()->count(),
+
             'totalcategorias' => Categoria::all()->count(),
-            'productos' => Producto::all(),
+            'producto' => $producto,
             'entradaCount' => $entradaCount,
             'salidaCount' => $salidaCount,
         ]);
