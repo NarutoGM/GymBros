@@ -2,19 +2,16 @@
 
 namespace App\Http\Controllers;
 
-
+use App\Models\Categoria;
 use Carbon\Carbon;
 
-use App\Models\Cursos;
 use App\Models\Membresias;
 use App\Models\Miembros;
 use App\Models\Movimientos;
 use App\Models\Producto;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
-use Illuminate\Support\Facades\Storage;
 
-use function Laravel\Prompts\alert;
 
 
 
@@ -81,15 +78,26 @@ class DashBoardController extends Controller
 
     public function index(Request $request, $month = null, $year = null)
     {
-        // Usa el mes y año actuales si no se proporciona ninguno
-        $month = $month ? (int) $month : Carbon::now()->month;
-        $year = $year ? (int) $year : Carbon::now()->year;
 
-        // Obtén los movimientos del mes y año seleccionados
-        $movimientos = Movimientos::with('productos:producto')
-            ->whereMonth('fecha', $month)
-            ->whereYear('fecha', $year)
-            ->get();
+        $query = Movimientos::orderBy('fecha', 'desc'); // Cambia 'desc' a 'asc' si necesitas un orden ascendente
+
+        // Usa el mes y año actuales si no se proporciona ninguno
+        $year = $request->query('year');
+        $month = $request->query('month');
+      // return response()->json([    'year' => $year, 'month' => $month]);
+
+        
+        if (!empty($year) && !empty($month)) {
+            $query->whereYear('fecha', $year)
+                  ->whereMonth('fecha', $month);
+        } elseif (!empty($year)) { // Filtrar solo por año si el mes no está presente
+            $query->whereYear('fecha', $year);
+        } elseif (!empty($month)) { // Filtrar solo por mes si el año no está presente
+            $query->whereMonth('fecha', $month);
+        }
+
+        $movimientos = $query->paginate(15);
+  //     return response()->json([    'movimientos' => $movimientos]);
 
         // Cuenta las entradas y salidas
         $entradaCount = $movimientos->where('tipo', 'E')->count();
@@ -97,6 +105,7 @@ class DashBoardController extends Controller
 
         return Inertia::render('Dashboard', [
             'movimientos' => $movimientos,
+            'totalcategorias' => Categoria::all()->count(),
             'productos' => Producto::all(),
             'entradaCount' => $entradaCount,
             'salidaCount' => $salidaCount,

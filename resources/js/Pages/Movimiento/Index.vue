@@ -2,22 +2,15 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import InputError from '@/Components/InputError.vue';
 import SecondaryButton from '@/Components/SecondaryButton.vue';
-import WarningButton from '@/Components/WarningButton.vue';
 import Modal from '@/Components/Modal.vue';
-import DarkButton from '@/Components/DarkButton.vue';
-import DeleteButton from '@/Components/DeleteButton.vue';
 import {ref,onMounted } from 'vue';
 import { Head , useForm} from '@inertiajs/vue3';
 import InputGroup from '@/Components/InputGroup.vue';
 import SelectInput from '@/Components/SelectInput.vue';
-import { useRouter } from 'vue-router';
 
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import vueTailwindPaginationUmd from '@ocrv/vue-tailwind-pagination';
-import Pagination from '@/Components/Pagination.vue';
-import NavLink from '@/Components/NavLink.vue';
 
-import Swal from 'sweetalert2';
 const props= defineProps({
 	movimientos:{type:Object},flash:{type:Object},  timeTakenInSeconds: { type: Number }
 	
@@ -40,48 +33,9 @@ const title = ref('');
 const msj = ref((props.flash.success != null) ? props.flash.success: '');
 const classMsj = ref((props.flash.success != null) ? ' ' : 'hidden');
 
-const openModalForm = (op,b) =>{
 
 
-showModalForm.value = true;
-operation = op;
-if (op===1){
-    title.value='Crear un nuevo producto';
-}else{
-    title.value='Editar un producto';
-    form.idCategoria=b.idCategoria;
-    form.categoria=b.categoria;
-    form.producto=b.producto;
-    form.precio=b.precio;
-    form.stock=b.stock;
-    form.idProducto=b.idProducto;
 
-
-}
- 
-}
-
-
-const deletedProductos= (idProducto,producto) =>{
-    const alerta=Swal.mixin({
-       buttonsStyling:true
-    });
-    alerta.fire({
-
-        title:'Desea eliminar el producto? '+  producto +' ? ',
-        icon:'question', showCancelButton:true,
-        confirmButtonText:'<i class="fa-solid fa-check"></i> Si, eliminar',
-        cancelButtonText:'<i class="fa-solid fa-ban"></i> Cancelar',
-    }).then((result) => {
-        if(result.isConfirmed) {
-		    
-            form.delete(route('productos.destroy',idProducto),{
-                onSuccess: () => {ok('Categoria eliminada')}
-            });
-			
-        }
-    });
-}
 
 const closeModalForm = () =>{
 	showModalForm.value = false;
@@ -153,9 +107,6 @@ const form2 = useForm({
 // Función para actualizar el dashboard
 function updateDashboard() {
   // Actualizar los valores del formulario antes de enviar la solicitud
-  const start_time = localStorage.getItem('startTime2');
-  localStorage.removeItem('startTime2'); // Resetea el startTime en localStorage
-
   form2.year = selectedYear.value;
   form2.month = selectedMonth.value;
   form2.start_time = start_time;
@@ -193,21 +144,6 @@ onMounted(() => {
 		</template>
 
 
-        <div>
-
-
-            <div>
-    <p
-      v-if="props.timeTakenInSeconds !== null"
-      class="bg-green-500 text-white p-4 rounded-md"
-      ref="timeMessage"
-    >
-      Tiempo transcurrido: {{ props.timeTakenInSeconds }} segundos
-    </p>
-  </div>
-  
-  <!-- Resto de tu código -->
-  </div>
 
         <div class="pb-2 flex justify-between items-center">
     <div class="flex space-x-4 mt-4">
